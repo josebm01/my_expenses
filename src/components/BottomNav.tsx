@@ -49,14 +49,14 @@ function CurrentBottomNav() {
   return (
     <nav
       aria-label="Navegación principal"
-      className="fixed inset-x-0 bottom-0 z-20 flex items-start justify-around border-t border-line bg-white px-2 pt-1.5 pb-[max(env(safe-area-inset-bottom),12px)] lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-20 flex items-start justify-around border-t border-line bg-surface px-2 pt-1.5 pb-[max(env(safe-area-inset-bottom),12px)] lg:hidden"
     >
       <NavLink item={HOME} pathname={pathname} />
       <NavLink item={TRANSACTIONS} pathname={pathname} />
       <Link
         href="/new"
         aria-label="Agregar movimiento"
-        className="-mt-0.5 flex size-14 items-center justify-center rounded-[18px] bg-ink text-white"
+        className="-mt-0.5 flex size-14 items-center justify-center rounded-[18px] bg-ink text-on-ink"
       >
         <Plus className="size-[26px]" strokeWidth={2.4} aria-hidden />
       </Link>

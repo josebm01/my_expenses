@@ -17,7 +17,7 @@ interface SpendingDonutProps {
 }
 
 export function SpendingDonut({ slices, ariaLabel, children }: SpendingDonutProps) {
-  const data = slices.length > 0 ? slices : [{ name: "Sin gastos", amount: 1, fill: "#EEF0EC" }];
+  const data = slices.length > 0 ? slices : [{ name: "Sin gastos", amount: 1, fill: "var(--color-track)" }];
 
   return (
     <div className="relative size-[200px]">

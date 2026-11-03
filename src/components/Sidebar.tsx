@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Suspense } from "react";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { cn } from "@/lib/utils";
 import { CATEGORIES_NAV, HOME, SETTINGS, SUMMARY, TRANSACTIONS, isActivePath } from "@/lib/navigation";
 
@@ -25,9 +26,9 @@ function CurrentSidebar() {
 /** Con `pathname` nulo no marca ninguna sección como activa. */
 function SidebarContent({ pathname }: { pathname: string | null }) {
   return (
-    <aside className="sticky top-0 hidden h-dvh w-[220px] shrink-0 flex-col gap-7 bg-ink px-[18px] py-7 text-white lg:flex">
+    <aside className="sticky top-0 hidden h-dvh w-[220px] shrink-0 flex-col gap-7 bg-panel px-[18px] py-7 text-white lg:flex">
       <div className="flex items-center gap-2.5 px-2">
-        <span className="flex size-[34px] items-center justify-center rounded-[10px] bg-white text-base font-extrabold text-ink">
+        <span className="flex size-[34px] items-center justify-center rounded-[10px] bg-white text-base font-extrabold text-panel">
           $
         </span>
         <span className="text-[17px] font-extrabold">Mis Gastos</span>
@@ -61,6 +62,8 @@ function SidebarContent({ pathname }: { pathname: string | null }) {
           );
         })}
       </nav>
+
+      <ThemeToggle variant="sidebar" className="mt-auto" />
     </aside>
   );
 }

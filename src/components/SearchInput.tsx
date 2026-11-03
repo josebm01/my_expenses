@@ -28,7 +28,7 @@ export function SearchInput({ defaultValue, basePath, params }: SearchInputProps
   }
 
   return (
-    <label className="flex h-[46px] items-center gap-2.5 rounded-control border border-line bg-white px-3.5 has-focus-visible:border-ink-soft">
+    <label className="flex h-[46px] items-center gap-2.5 rounded-control border border-line bg-surface px-3.5 has-focus-visible:border-ink-soft">
       <Search className="size-[18px] shrink-0 text-ink-soft" aria-hidden />
       <span className="sr-only">Buscar movimiento</span>
       <input
@@ -36,7 +36,7 @@ export function SearchInput({ defaultValue, basePath, params }: SearchInputProps
         defaultValue={defaultValue}
         onChange={(event) => handleChange(event.target.value)}
         placeholder="Buscar por concepto o nota"
-        className="min-w-0 flex-1 bg-transparent text-[15px] text-ink outline-none placeholder:text-[#7A808C]"
+        className="min-w-0 flex-1 bg-transparent text-[15px] text-ink outline-none placeholder:text-placeholder"
       />
     </label>
   );

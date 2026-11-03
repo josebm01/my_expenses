@@ -40,7 +40,7 @@ async function CategoriesContent({ searchParams }: Pick<PageProps<"/categories">
         <h1 className="text-[26px] font-extrabold tracking-[-0.02em] lg:text-[30px]">Categorías</h1>
         <Link
           href={buildHref("/categories/new", { tipo: tab.value })}
-          className="flex h-11 items-center gap-1.5 rounded-control bg-ink px-4 text-sm font-bold text-white hover:bg-ink/90"
+          className="flex h-11 items-center gap-1.5 rounded-control bg-ink px-4 text-sm font-bold text-on-ink hover:bg-ink/90"
         >
           <Plus className="size-[18px]" strokeWidth={2.4} aria-hidden />
           Nueva
@@ -52,7 +52,7 @@ async function CategoriesContent({ searchParams }: Pick<PageProps<"/categories">
         chips={TYPE_TABS.map((t) => ({ label: t.label, href: buildHref("/categories", { tipo: t.value }), active: t === tab }))}
       />
 
-      <ul className="flex flex-col rounded-[18px] bg-white px-3.5 py-1">
+      <ul className="flex flex-col rounded-[18px] bg-surface shadow-card px-3.5 py-1">
         {categories.map((category) => (
           <li key={category.id}>
             <Link href={`/categories/${category.id}`} className="flex items-center gap-3 py-2.5">

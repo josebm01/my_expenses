@@ -53,7 +53,7 @@ export function CategoryForm({ category, initialType, fromNew = false }: Categor
         <Link
           href={closeHref}
           aria-label="Cerrar"
-          className="flex size-11 items-center justify-center rounded-icon border border-line bg-white text-ink hover:bg-canvas"
+          className="flex size-11 items-center justify-center rounded-icon border border-line bg-surface text-ink hover:bg-canvas"
         >
           <X className="size-5" aria-hidden />
         </Link>
@@ -81,7 +81,7 @@ export function CategoryForm({ category, initialType, fromNew = false }: Categor
                 onClick={() => setType(option)}
                 className={cn(
                   "h-10 rounded-[11px] text-sm font-bold",
-                  active ? "bg-white shadow-[0_1px_2px_rgba(0,0,0,0.08)]" : "text-ink-soft",
+                  active ? "bg-segment-active shadow-[0_1px_2px_rgba(0,0,0,0.08)]" : "text-ink-soft",
                   active && (option === "expense" ? "text-expense" : "text-income"),
                 )}
               >
@@ -103,7 +103,7 @@ export function CategoryForm({ category, initialType, fromNew = false }: Categor
           onChange={(event) => setName(event.target.value)}
           placeholder={type === "expense" ? "Ej. Mascotas" : "Ej. Rentas"}
           aria-invalid={saveState.error ? true : undefined}
-          className="h-12 rounded-control border border-line-strong bg-white px-3.5 text-[15px] text-ink placeholder:text-[#7A808C]"
+          className="h-12 rounded-control border border-line-strong bg-surface px-3.5 text-[15px] text-ink placeholder:text-placeholder"
         />
       </label>
 
@@ -148,7 +148,7 @@ export function CategoryForm({ category, initialType, fromNew = false }: Categor
                 onClick={() => setIcon(key as CategoryIconKey)}
                 className={cn(
                   "flex h-11 items-center justify-center rounded-control border-2",
-                  active ? "border-ink" : "border-white bg-white",
+                  active ? "border-ink" : "border-surface bg-surface",
                 )}
                 style={active ? { backgroundColor: tint, color } : undefined}
               >
@@ -170,14 +170,14 @@ export function CategoryForm({ category, initialType, fromNew = false }: Categor
       <button
         type="submit"
         disabled={isSaving || isDeleting}
-        className="h-14 shrink-0 rounded-2xl bg-ink text-base font-bold text-white hover:bg-ink/90 disabled:opacity-60"
+        className="h-14 shrink-0 rounded-2xl bg-ink text-base font-bold text-on-ink hover:bg-ink/90 disabled:opacity-60"
       >
         {isSaving ? "Guardando…" : category ? "Guardar cambios" : "Crear categoría"}
       </button>
 
       {category &&
         (confirmingDelete ? (
-          <div className="flex flex-col gap-3 rounded-card bg-white p-4">
+          <div className="flex flex-col gap-3 rounded-card bg-surface p-4 shadow-card">
             <p className="text-sm text-ink">
               ¿Eliminar <strong>{category.name}</strong>? Los movimientos que ya registraste con ella la conservan.
             </p>
@@ -190,7 +190,7 @@ export function CategoryForm({ category, initialType, fromNew = false }: Categor
               <button
                 type="button"
                 onClick={() => setConfirmingDelete(false)}
-                className="h-11 rounded-control border border-line-strong bg-white text-sm font-bold text-ink hover:bg-canvas"
+                className="h-11 rounded-control border border-line-strong bg-surface text-sm font-bold text-ink hover:bg-canvas"
               >
                 Cancelar
               </button>
@@ -199,7 +199,7 @@ export function CategoryForm({ category, initialType, fromNew = false }: Categor
                 formAction={deleteAction}
                 formNoValidate
                 disabled={isSaving || isDeleting}
-                className="h-11 rounded-control bg-expense text-sm font-bold text-white hover:bg-expense/90 disabled:opacity-60"
+                className="h-11 rounded-control bg-expense text-sm font-bold text-on-ink hover:bg-expense/90 disabled:opacity-60"
               >
                 {isDeleting ? "Eliminando…" : "Sí, eliminar"}
               </button>
@@ -209,7 +209,7 @@ export function CategoryForm({ category, initialType, fromNew = false }: Categor
           <button
             type="button"
             onClick={() => setConfirmingDelete(true)}
-            className="h-11 shrink-0 rounded-control text-sm font-bold text-expense hover:bg-white"
+            className="h-11 shrink-0 rounded-control text-sm font-bold text-expense hover:bg-surface"
           >
             Eliminar categoría
           </button>

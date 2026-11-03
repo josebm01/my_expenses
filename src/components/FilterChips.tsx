@@ -19,7 +19,7 @@ export function FilterChips({ chips, label }: { chips: FilterChip[]; label: stri
           aria-current={chip.active ? "true" : undefined}
           className={cn(
             "hit-44 flex h-9 items-center rounded-full border px-4 text-[13px] font-bold",
-            chip.active ? "border-ink bg-ink text-white" : "border-line-strong bg-white text-ink hover:bg-canvas",
+            chip.active ? "border-ink bg-ink text-on-ink" : "border-line-strong bg-surface text-ink hover:bg-canvas",
           )}
         >
           {chip.label}

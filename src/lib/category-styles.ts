@@ -59,16 +59,22 @@ export interface CategoryPalette {
   chartColor: string;
 }
 
+/** Valor CSS que cambia con el modo claro/oscuro (`color-scheme` en globals.css). Sirve en inline styles. */
+function lightDark(light: string, dark: string): string {
+  return `light-dark(${light}, ${dark})`;
+}
+
+// En oscuro: texto más claro y fondo translúcido del color de la gráfica, para que no brille sobre el fondo oscuro.
 export const CATEGORY_PALETTES = {
-  orange: { label: "Naranja", color: "#C25E14", tint: "#FCEBDD", chartColor: "#E07A2E" },
-  ochre: { label: "Ocre", color: "#9A7410", tint: "#F8EFD3", chartColor: "#D4A72C" },
-  pink: { label: "Rosa", color: "#B03A6E", tint: "#F8E3EC", chartColor: "#C2477D" },
-  purple: { label: "Morado", color: "#7444C0", tint: "#EEE6FA", chartColor: "#8E5BD6" },
-  blue: { label: "Azul", color: "#2F5FC4", tint: "#E2EAFB", chartColor: "#3B6FD8" },
-  cyan: { label: "Azul petróleo", color: "#0B6A86", tint: "#DDF0F6", chartColor: "#0B6A86" },
-  teal: { label: "Turquesa", color: "#1E7F73", tint: "#DDF2EF", chartColor: "#2A9D8F" },
-  slate: { label: "Pizarra", color: "#5B6472", tint: "#ECEEF1", chartColor: "#5B6472" },
-  gray: { label: "Gris", color: "#5B6472", tint: "#ECEEF1", chartColor: "#9AA0AA" },
+  orange: { label: "Naranja", color: lightDark("#C25E14", "#F2A465"), tint: lightDark("#FCEBDD", "rgba(224, 122, 46, 0.2)"), chartColor: "#E07A2E" },
+  ochre: { label: "Ocre", color: lightDark("#9A7410", "#E3BE55"), tint: lightDark("#F8EFD3", "rgba(212, 167, 44, 0.18)"), chartColor: "#D4A72C" },
+  pink: { label: "Rosa", color: lightDark("#B03A6E", "#EA80B0"), tint: lightDark("#F8E3EC", "rgba(194, 71, 125, 0.22)"), chartColor: "#C2477D" },
+  purple: { label: "Morado", color: lightDark("#7444C0", "#B994F2"), tint: lightDark("#EEE6FA", "rgba(142, 91, 214, 0.24)"), chartColor: "#8E5BD6" },
+  blue: { label: "Azul", color: lightDark("#2F5FC4", "#8AAEF5"), tint: lightDark("#E2EAFB", "rgba(59, 111, 216, 0.24)"), chartColor: "#3B6FD8" },
+  cyan: { label: "Azul petróleo", color: lightDark("#0B6A86", "#6FC3DD"), tint: lightDark("#DDF0F6", "rgba(11, 106, 134, 0.35)"), chartColor: "#0B6A86" },
+  teal: { label: "Turquesa", color: lightDark("#1E7F73", "#62CBBC"), tint: lightDark("#DDF2EF", "rgba(42, 157, 143, 0.22)"), chartColor: "#2A9D8F" },
+  slate: { label: "Pizarra", color: lightDark("#5B6472", "#B3BAC5"), tint: lightDark("#ECEEF1", "rgba(154, 160, 170, 0.16)"), chartColor: "#5B6472" },
+  gray: { label: "Gris", color: lightDark("#5B6472", "#B3BAC5"), tint: lightDark("#ECEEF1", "rgba(154, 160, 170, 0.16)"), chartColor: "#9AA0AA" },
 } satisfies Record<string, CategoryPalette>;
 
 export type CategoryPaletteKey = keyof typeof CATEGORY_PALETTES;

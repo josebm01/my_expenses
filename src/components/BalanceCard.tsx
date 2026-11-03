@@ -21,7 +21,7 @@ export function BalanceCard({ totals, className }: { totals: MonthTotals; classN
     <section
       role="group"
       aria-label="Filtrar últimos movimientos"
-      className={cn("flex flex-col gap-4 rounded-card bg-ink p-5 text-white", className)}
+      className={cn("flex flex-col gap-4 rounded-card bg-panel p-5 shadow-card text-white", className)}
     >
       <button
         type="button"

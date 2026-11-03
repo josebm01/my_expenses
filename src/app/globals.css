@@ -47,11 +47,21 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* Tokens de diseño (design/*.dc.html) */
-@theme {
+/* Tokens de diseño (design/*.dc.html). `static`: se emiten todos, porque las gráficas los leen con var(). */
+@theme static {
   --color-canvas: #f3f4f1;
+  /* Tarjetas, inputs y barras: blanco en claro. */
+  --color-surface: #ffffff;
+  /* Pastilla activa del control segmentado (Gasto / Ingreso). */
+  --color-segment-active: #ffffff;
   --color-ink: #15171c;
+  /* Texto sobre `bg-ink` (botones principales, chips activos); se invierte en oscuro. */
+  --color-on-ink: #ffffff;
   --color-ink-soft: #5b616e;
+  --color-placeholder: #7a808c;
+  /* Paneles que siempre son oscuros (balance, sidebar), con texto blanco. */
+  --color-panel: #15171c;
+  --color-income-hover: #08506a;
   --color-line: #e4e6e1;
   --color-line-strong: #daddd6;
   --color-track: #eef0ec;
@@ -71,6 +81,42 @@
   --radius-panel: 20px;
   --radius-control: 14px;
   --radius-icon: 12px;
+
+  /* Sombra suave de tarjetas; `-hover` para las que son clicables. */
+  --shadow-card: 0 1px 3px rgba(21, 23, 28, 0.07), 0 6px 20px rgba(21, 23, 28, 0.08);
+  --shadow-card-hover: 0 2px 6px rgba(21, 23, 28, 0.09), 0 12px 32px rgba(21, 23, 28, 0.13);
+}
+
+/*
+ * Modo oscuro: `.dark` en <html> lo pone el script de `ThemeScript` (preferencia guardada o la del sistema).
+ * Las utilidades leen `var(--color-*)`, así que basta con redefinir los tokens aquí.
+ */
+:root {
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+  --color-canvas: #0f1114;
+  --color-surface: #1a1d22;
+  --color-segment-active: #353a43;
+  --color-ink: #eceef1;
+  --color-on-ink: #15171c;
+  --color-ink-soft: #9ba1ad;
+  --color-placeholder: #6e7480;
+  --color-panel: #252a32;
+  --color-line: #2a2e35;
+  --color-line-strong: #363b44;
+  --color-track: #262a31;
+  --color-segment: #22262c;
+  --color-income: #5bb8d4;
+  --color-income-hover: #8fd0e4;
+  --color-income-soft: rgba(91, 184, 212, 0.16);
+  --color-expense: #f08a5d;
+  --color-night: #313741;
+  --color-sidebar-active: #353b45;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 6px 20px rgba(0, 0, 0, 0.25);
+  --shadow-card-hover: 0 2px 6px rgba(0, 0, 0, 0.35), 0 12px 32px rgba(0, 0, 0, 0.35);
 }
 
 :root {
@@ -109,10 +155,10 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
+  --background: #0f1114;
+  --foreground: #eceef1;
+  --card: #1a1d22;
+  --card-foreground: #eceef1;
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
   --primary: oklch(0.922 0 0);

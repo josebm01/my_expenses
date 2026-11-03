@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Manrope } from "next/font/google";
 import { BottomNav } from "@/components/BottomNav";
 import { Sidebar } from "@/components/Sidebar";
+import { THEME_COLORS, THEME_SCRIPT } from "@/lib/theme";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -16,13 +17,18 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#F3F4F1",
+  // El script de tema la cambia al color oscuro cuando corresponde.
+  themeColor: THEME_COLORS.light,
   viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="es" className={`${manrope.variable} h-full antialiased`}>
+    // `suppressHydrationWarning`: el script agrega `.dark` a <html> antes de hidratar.
+    <html lang="es" className={`${manrope.variable} h-full antialiased`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body className="min-h-full bg-canvas text-ink">
         <div className="lg:flex">
           <Sidebar />

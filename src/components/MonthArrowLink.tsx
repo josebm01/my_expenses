@@ -18,7 +18,7 @@ export function MonthArrowLink({ month, direction, className }: MonthArrowLinkPr
       href={`/?mes=${target}`}
       aria-label={direction === "prev" ? "Mes anterior" : "Mes siguiente"}
       className={cn(
-        "flex size-11 shrink-0 items-center justify-center rounded-icon border border-line bg-white text-ink hover:bg-canvas",
+        "flex size-11 shrink-0 items-center justify-center rounded-icon border border-line bg-surface text-ink hover:bg-canvas",
         className,
       )}
     >

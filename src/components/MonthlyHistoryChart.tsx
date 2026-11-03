@@ -24,8 +24,10 @@ const SIZES = {
   full: { plotHeight: 240, axisHeight: 44, barSize: 22, barGap: 5, radius: 5 },
 } as const;
 
-const INK = "#15171C";
-const INK_SOFT = "#5B616E";
+// Variables CSS de los tokens para que las gráficas sigan el modo claro/oscuro.
+const INK = "var(--color-ink)";
+const INK_SOFT = "var(--color-ink-soft)";
+const LINE = "var(--color-line)";
 
 export function MonthlyHistoryChart({ data, variant, ariaLabel }: MonthlyHistoryChartProps) {
   const size = SIZES[variant];
@@ -68,19 +70,19 @@ export function MonthlyHistoryChart({ data, variant, ariaLabel }: MonthlyHistory
           dataKey="label"
           interval={0}
           tickLine={false}
-          axisLine={{ stroke: "#E4E6E1" }}
+          axisLine={{ stroke: LINE }}
           height={size.axisHeight}
           tick={renderTick}
         />
         <YAxis hide domain={[0, maxValue * 1.04]} />
         <Tooltip
-          cursor={{ fill: "#EEF0EC" }}
+          cursor={{ fill: "var(--color-track)" }}
           formatter={(value) => formatCurrency(Number(value))}
-          contentStyle={{ borderRadius: 12, borderColor: "#E4E6E1", fontSize: 13 }}
+          contentStyle={{ borderRadius: 12, borderColor: LINE, backgroundColor: "var(--color-surface)", fontSize: 13 }}
           labelStyle={{ fontWeight: 700, color: INK }}
         />
-        <Bar dataKey="income" name="Ingresos" fill="#0B6A86" barSize={size.barSize} radius={radius} isAnimationActive={false} />
-        <Bar dataKey="expenses" name="Gastos" fill="#E07A2E" barSize={size.barSize} radius={radius} isAnimationActive={false} />
+        <Bar dataKey="income" name="Ingresos" fill="var(--color-income)" barSize={size.barSize} radius={radius} isAnimationActive={false} />
+        <Bar dataKey="expenses" name="Gastos" fill="var(--color-expense-chart)" barSize={size.barSize} radius={radius} isAnimationActive={false} />
       </BarChart>
     </div>
   );

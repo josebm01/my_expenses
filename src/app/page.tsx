@@ -9,6 +9,7 @@ import { MonthArrowLink } from "@/components/MonthArrowLink";
 import { MonthlyHistoryCard } from "@/components/MonthlyHistoryCard";
 import { PageContainer } from "@/components/PageContainer";
 import { PageSkeleton } from "@/components/PageSkeleton";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { RecentTransactionsCard } from "@/components/RecentTransactionsCard";
 import { TransactionTypeFilter } from "@/components/TransactionTypeFilter";
 import { TransactionTypeView } from "@/components/TransactionTypeView";
@@ -46,13 +47,15 @@ async function HomeContent({ searchParams }: Pick<PageProps<"/">, "searchParams"
 
   return (
     <>
+      {/* Móvil: el cambio de tema va en su propio renglón para que el mes y las flechas quepan en 375px. */}
+      <div className="-mb-3 flex items-center justify-between lg:hidden">
+        <span className="text-[13px] font-medium text-ink-soft">Hola, Jose</span>
+        <ThemeToggle variant="icon" />
+      </div>
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <MonthArrowLink month={month} direction="prev" className="hidden lg:flex" />
-          <div className="flex flex-col gap-0.5">
-            <span className="text-[13px] font-medium text-ink-soft lg:hidden">Hola, Jose</span>
-            <h1 className="text-[26px] font-extrabold tracking-[-0.02em] lg:text-[30px]">{formatMonthTitle(month)}</h1>
-          </div>
+          <h1 className="text-[26px] font-extrabold tracking-[-0.02em] lg:text-[30px]">{formatMonthTitle(month)}</h1>
           <MonthArrowLink month={month} direction="next" className="hidden lg:flex" />
         </div>
         <div className="flex gap-2 lg:hidden">
@@ -61,7 +64,7 @@ async function HomeContent({ searchParams }: Pick<PageProps<"/">, "searchParams"
         </div>
         <Link
           href="/new"
-          className="hidden h-[46px] items-center gap-2 rounded-control bg-ink px-5 text-[15px] font-bold text-white hover:bg-ink/90 lg:flex"
+          className="hidden h-[46px] items-center gap-2 rounded-control bg-ink px-5 text-[15px] font-bold text-on-ink hover:bg-ink/90 lg:flex"
         >
           <Plus className="size-[18px]" strokeWidth={2.4} aria-hidden />
           Nuevo movimiento

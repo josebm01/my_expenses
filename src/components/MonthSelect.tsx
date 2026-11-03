@@ -24,7 +24,7 @@ export function MonthSelect({ value, label, options }: MonthSelectProps) {
 
   return (
     <label
-      className="relative flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-line-strong bg-white px-3 text-[13px] font-semibold text-ink has-focus-visible:ring-2 has-focus-visible:ring-ink-soft/50 data-pending:opacity-60"
+      className="relative flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-line-strong bg-surface px-3 text-[13px] font-semibold text-ink has-focus-visible:ring-2 has-focus-visible:ring-ink-soft/50 data-pending:opacity-60"
       data-pending={isPending ? "" : undefined}
     >
       {label}
