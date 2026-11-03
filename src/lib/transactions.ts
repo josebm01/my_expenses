@@ -191,18 +191,42 @@ export async function getTransactionsByDay({ month, type, query }: TransactionFi
   return groups;
 }
 
-export interface NewTransaction {
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** `null` si no existe o el id no es un UUID (la columna es `@db.Uuid` y Postgres rechazaría la consulta). */
+export async function getTransaction(id: string): Promise<Transaction | null> {
+  if (!UUID_PATTERN.test(id)) return null;
+  const record = await prisma.transaction.findUnique({ where: { id }, include: withCategory });
+  return record && toTransaction(record);
+}
+
+export interface TransactionInput {
   type: TransactionType;
   amount: number;
   categoryId: string;
+  /** Sin `concept` se deja el que ya tenía (las altas nuevas no lo usan). */
+  concept?: string | null;
   note: string | null;
   date: Date;
 }
 
-export async function createTransaction(input: NewTransaction): Promise<Transaction> {
+export async function createTransaction(input: TransactionInput): Promise<Transaction> {
   const record = await prisma.transaction.create({
     data: { ...input, amount: input.amount.toFixed(2) },
     include: withCategory,
   });
   return toTransaction(record);
+}
+
+export async function updateTransaction(id: string, input: TransactionInput): Promise<Transaction> {
+  const record = await prisma.transaction.update({
+    where: { id },
+    data: { ...input, amount: input.amount.toFixed(2) },
+    include: withCategory,
+  });
+  return toTransaction(record);
+}
+
+export async function deleteTransaction(id: string): Promise<void> {
+  await prisma.transaction.deleteMany({ where: { id } });
 }
