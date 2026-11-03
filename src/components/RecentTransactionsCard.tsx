@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Card } from "@/components/Card";
 import { TransactionRow } from "@/components/TransactionRow";
 import { formatRelativeDay, formatShortDate, toDayKey, type DayKey } from "@/lib/dates";
@@ -13,7 +14,9 @@ interface RecentTransactionsCardProps {
   emptyMessage?: string;
 }
 
-/** Móvil: lista de 3. Escritorio: tabla con todos los recibidos. */
+const editHref = (t: Transaction) => `/transactions/${t.id}?desde=inicio`;
+
+/** Móvil: lista de 3. Escritorio: tabla con todos los recibidos. Cada fila abre la edición. */
 export function RecentTransactionsCard({
   transactions,
   today,
@@ -33,6 +36,7 @@ export function RecentTransactionsCard({
                 key={t.id}
                 transaction={t}
                 meta={`${t.category.name} · ${formatRelativeDay(toDayKey(t.date), today)}`}
+                href={editHref(t)}
                 className="py-1.5"
               />
             ))}
@@ -51,20 +55,38 @@ export function RecentTransactionsCard({
               <tbody>
                 {transactions.map((t) => {
                   const { category } = t;
+                  const href = editHref(t);
+                  // Cada celda enlaza a la edición para que toda la fila sea clicable (Safari ignora
+                  // `position: relative` en <tr>, así que no sirve estirar un solo enlace). Solo el del
+                  // concepto es enfocable y se anuncia; los demás son duplicados.
+                  const cellLink = "flex min-h-[50px] items-center";
+                  const duplicate = { tabIndex: -1, "aria-hidden": true } as const;
                   return (
-                    <tr key={t.id} className="border-t border-track">
-                      <td className="py-3 pr-2 whitespace-nowrap text-ink-soft">{formatShortDate(toDayKey(t.date))}</td>
-                      <td className="p-2 py-3 font-semibold">{transactionTitle(t)}</td>
-                      <td className="p-2 py-3">
-                        <span
-                          className="inline-flex h-[26px] items-center rounded-full px-2.5 text-xs font-bold"
-                          style={{ backgroundColor: category.tint, color: category.color }}
-                        >
-                          {category.name}
-                        </span>
+                    <tr key={t.id} className="border-t border-track hover:bg-canvas">
+                      <td className="pr-2 whitespace-nowrap text-ink-soft">
+                        <Link href={href} className={cellLink} {...duplicate}>
+                          {formatShortDate(toDayKey(t.date))}
+                        </Link>
                       </td>
-                      <td className={cn("py-3 pl-2 text-right font-bold", t.type === "income" ? "text-income" : "text-ink")}>
-                        {formatSignedCurrency(signedAmount(t))}
+                      <td className="px-2 font-semibold">
+                        <Link href={href} className={cellLink}>
+                          {transactionTitle(t)}
+                        </Link>
+                      </td>
+                      <td className="px-2">
+                        <Link href={href} className={cellLink} {...duplicate}>
+                          <span
+                            className="inline-flex h-[26px] items-center rounded-full px-2.5 text-xs font-bold"
+                            style={{ backgroundColor: category.tint, color: category.color }}
+                          >
+                            {category.name}
+                          </span>
+                        </Link>
+                      </td>
+                      <td className={cn("pl-2 font-bold", t.type === "income" ? "text-income" : "text-expense")}>
+                        <Link href={href} className={cn(cellLink, "justify-end")} {...duplicate}>
+                          {formatSignedCurrency(signedAmount(t))}
+                        </Link>
                       </td>
                     </tr>
                   );
