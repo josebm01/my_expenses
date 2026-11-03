@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Nuevo movimiento</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+body{margin:0}
+a{color:#0B6A86;text-decoration:none}a:hover{color:#08506A}
+input::placeholder{color:#7A808C}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F3F4F1; font-family: Manrope, system-ui, sans-serif; color: #15171C; display: flex; flex-direction: column; padding: 52px 20px 34px; gap: 18px; font-variant-numeric: tabular-nums">
+  <div style="display: flex; align-items: center; justify-content: space-between">
+    <a href="Main.dc.html" aria-label="Cerrar" style="width: 44px; height: 44px; border-radius: 12px; border: 1px solid #E4E6E1; background: #FFFFFF; display: flex; align-items: center; justify-content: center; color: #15171C; box-sizing: border-box">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+    </a>
+    <h1 style="margin: 0; font-size: 17px; font-weight: 700">Nuevo movimiento</h1>
+    <div style="width: 44px; height: 44px"></div>
+  </div>
+
+  <div role="group" aria-label="Tipo de movimiento" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; background: #E6E8E3; border-radius: 14px; padding: 4px">
+    <button onClick="{{pickGasto}}" style="{{gastoStyle}}">Gasto</button>
+    <button onClick="{{pickIngreso}}" style="{{ingresoStyle}}">Ingreso</button>
+  </div>
+
+  <label style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 0 4px">
+    <span style="font-size: 13px; color: #5B616E; font-weight: 600">Monto</span>
+    <span style="display: flex; align-items: baseline; gap: 4px">
+      <span style="font-size: 32px; font-weight: 700; color: {{amtColor}}">{{sign}}$</span>
+      <input inputmode="decimal" value="{{amount}}" onChange="{{setAmount}}" style="width: 220px; border: 0; background: transparent; font-family: inherit; font-size: 52px; font-weight: 800; letter-spacing: -0.03em; color: {{amtColor}}; text-align: left; outline: none; padding: 0" placeholder="0.00">
+    </span>
+    <span style="font-size: 12px; color: #5B616E">MXN</span>
+  </label>
+
+  <div style="display: flex; flex-direction: column; gap: 10px">
+    <span style="font-size: 13px; font-weight: 700">Categoría</span>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px">
+      <sc-for list="{{cats}}" as="c" hint-placeholder-count="8">
+        <button onClick="{{c.pick}}" aria-pressed="{{c.pressed}}" style="{{c.style}}">
+          <span style="width: 36px; height: 36px; border-radius: 11px; background: {{c.tint}}; display: flex; align-items: center; justify-content: center">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="{{c.color}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{c.icon}}"></path></svg>
+          </span>
+          <span style="font-size: 11px; font-weight: 600; color: #15171C; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%">{{c.short}}</span>
+        </button>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 10px">
+    <span style="font-size: 13px; font-weight: 700">Fecha</span>
+    <div style="display: flex; gap: 8px">
+      <sc-for list="{{dates}}" as="d" hint-placeholder-count="3">
+        <button onClick="{{d.pick}}" style="{{d.style}}">{{d.label}}</button>
+      </sc-for>
+    </div>
+  </div>
+
+  <label style="display: flex; flex-direction: column; gap: 8px">
+    <span style="font-size: 13px; font-weight: 700">Nota <span style="font-weight: 500; color: #5B616E">(opcional)</span></span>
+    <input placeholder="Ej. súper de la semana" style="height: 48px; border-radius: 14px; border: 1px solid #DADDD6; background: #FFFFFF; padding: 0 14px; font-family: inherit; font-size: 15px; color: #15171C; box-sizing: border-box">
+  </label>
+
+  <div style="flex: 1"></div>
+
+  <a href="Main.dc.html" style="height: 56px; border-radius: 16px; background: #15171C; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700">{{saveLabel}}</a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { type: 'gasto', cat: 'alimentos', date: 'hoy', amount: '842.50' };
+  }
+  renderVals() {
+    var self = this;
+    var s = this.state;
+    var I = {
+      alimentos: 'M3 4h2l2.4 11h11.2L21 8H6.2M9 20h.01M18 20h.01',
+      compras: 'M6 7h12l-1 13H7zM9 7a3 3 0 0 1 6 0',
+      salud: 'M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z',
+      entretenimiento: 'M3 9a2 2 0 0 0 0 6v3h18v-3a2 2 0 0 0 0-6V6H3zM13 6v12',
+      transporte: 'M5 16v-5l2-5h10l2 5v5M5 16h14M5 16v2M19 16v2M7.5 13h.01M16.5 13h.01',
+      hogar: 'M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z',
+      servicios: 'M13 3L5 14h6l-1 7 8-11h-6z',
+      otro: 'M5 12h.01M12 12h.01M19 12h.01',
+      sueldo: 'M3 7h18v12H3zM3 11h18M7 15h3',
+      freelance: 'M4 6h16v10H4zM2 20h20',
+      ventas: 'M20 12l-8 8-9-9V3h8zM7.5 7.5h.01',
+      reembolso: 'M3 12a9 9 0 1 0 3-6.7M3 4v5h5'
+    };
+    var gastos = [
+      ['alimentos', 'Alimentos', '#C25E14', '#FCEBDD'], ['compras', 'Compras', '#2F5FC4', '#E2EAFB'],
+      ['salud', 'Salud', '#1E7F73', '#DDF2EF'], ['entretenimiento', 'Entreten.', '#7444C0', '#EEE6FA'],
+      ['transporte', 'Transporte', '#9A7410', '#F8EFD3'], ['hogar', 'Hogar', '#5B6472', '#ECEEF1'],
+      ['servicios', 'Servicios', '#B03A6E', '#F8E3EC'], ['otro', 'Otro', '#5B6472', '#ECEEF1']
+    ];
+    var ingresos = [
+      ['sueldo', 'Sueldo', '#0B6A86', '#DDF0F6'], ['freelance', 'Freelance', '#0B6A86', '#DDF0F6'],
+      ['ventas', 'Ventas', '#0B6A86', '#DDF0F6'], ['reembolso', 'Reembolso', '#0B6A86', '#DDF0F6']
+    ];
+    var list = s.type === 'gasto' ? gastos : ingresos;
+    var base = 'display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 4px; border-radius: 14px; background: #FFFFFF; cursor: pointer; font-family: inherit; min-height: 72px; box-sizing: border-box; min-width: 0; ';
+    var cats = list.map(function (c) {
+      var on = s.cat === c[0];
+      return {
+        short: c[1], color: c[2], tint: c[3], icon: I[c[0]], pressed: on ? 'true' : 'false',
+        style: base + (on ? 'border: 2px solid #15171C;' : 'border: 2px solid #FFFFFF;'),
+        pick: function () { self.setState({ cat: c[0] }); }
+      };
+    });
+    var dBase = 'height: 44px; padding: 0 16px; border-radius: 999px; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; ';
+    var dates = [['hoy', 'Hoy, 31 oct'], ['ayer', 'Ayer'], ['otra', 'Otra fecha…']].map(function (d) {
+      var on = s.date === d[0];
+      return {
+        label: d[1],
+        style: dBase + (on ? 'background: #15171C; color: #FFFFFF; border: 1px solid #15171C;' : 'background: #FFFFFF; color: #15171C; border: 1px solid #DADDD6;'),
+        pick: function () { self.setState({ date: d[0] }); }
+      };
+    });
+    var seg = 'height: 40px; border: 0; border-radius: 11px; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; ';
+    var isG = s.type === 'gasto';
+    return {
+      cats: cats, dates: dates, amount: s.amount,
+      setAmount: function (e) { self.setState({ amount: e.target.value }); },
+      pickGasto: function () { self.setState({ type: 'gasto', cat: 'alimentos' }); },
+      pickIngreso: function () { self.setState({ type: 'ingreso', cat: 'sueldo' }); },
+      gastoStyle: seg + (isG ? 'background: #FFFFFF; color: #B93D0B; box-shadow: 0 1px 2px rgba(0,0,0,0.08);' : 'background: transparent; color: #5B616E;'),
+      ingresoStyle: seg + (!isG ? 'background: #FFFFFF; color: #0B6A86; box-shadow: 0 1px 2px rgba(0,0,0,0.08);' : 'background: transparent; color: #5B616E;'),
+      sign: isG ? '−' : '+',
+      amtColor: isG ? '#B93D0B' : '#0B6A86',
+      saveLabel: isG ? 'Guardar gasto' : 'Guardar ingreso'
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum TransactionType {
+  expense
+  income
+}
+
+/// Las categorías por defecto se insertan en la migración `custom_categories` con ids legibles ("groceries", "salary"…).
+model Category {
+  id           String          @id @default(uuid())
+  type         TransactionType
+  name         String
+  /// Clave de `CATEGORY_ICONS` en src/lib/category-styles.ts.
+  icon         String
+  /// Clave de `CATEGORY_PALETTES` en src/lib/category-styles.ts.
+  palette      String
+  /// Orden en la cuadrícula de "Nuevo movimiento".
+  position     Int
+  /// Una categoría con movimientos no se borra: se archiva para conservar el historial.
+  archivedAt   DateTime?       @map("archived_at") @db.Timestamptz(3)
+  createdAt    DateTime        @default(now()) @map("created_at") @db.Timestamptz(3)
+  transactions Transaction[]
+
+  @@index([type, position])
+  @@map("categories")
+}
+
+model Transaction {
+  id         String          @id @default(uuid()) @db.Uuid
+  type       TransactionType
+  /// Siempre positivo; el signo lo da `type`.
+  amount     Decimal         @db.Decimal(12, 2)
+  categoryId String          @map("category_id")
+  category   Category        @relation(fields: [categoryId], references: [id])
+  concept    String?
+  note       String?
+  date       DateTime        @db.Timestamptz(3)
+  createdAt  DateTime        @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@index([date])
+  @@index([categoryId])
+  @@map("transactions")
+}

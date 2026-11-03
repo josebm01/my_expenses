@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Inicio — resumen del mes</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+body{margin:0}
+a{color:#0B6A86;text-decoration:none}a:hover{color:#08506A}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F3F4F1; font-family: Manrope, system-ui, sans-serif; color: #15171C; display: flex; flex-direction: column; overflow: hidden; font-variant-numeric: tabular-nums">
+  <main style="flex: 1; display: flex; flex-direction: column; gap: 16px; padding: 52px 20px 16px; overflow: hidden">
+    <div style="display: flex; align-items: center; justify-content: space-between">
+      <div style="display: flex; flex-direction: column; gap: 2px">
+        <span style="font-size: 13px; color: #5B616E; font-weight: 500">Hola, Jose</span>
+        <h1 style="margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -0.02em">Octubre 2026</h1>
+      </div>
+      <div style="display: flex; gap: 8px">
+        <button aria-label="Mes anterior" style="width: 44px; height: 44px; border-radius: 12px; border: 1px solid #E4E6E1; background: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #15171C">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg>
+        </button>
+        <button aria-label="Mes siguiente" style="width: 44px; height: 44px; border-radius: 12px; border: 1px solid #E4E6E1; background: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #15171C">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"></path></svg>
+        </button>
+      </div>
+    </div>
+
+    <section style="background: #15171C; color: #FFFFFF; border-radius: 22px; padding: 20px; display: flex; flex-direction: column; gap: 16px">
+      <div style="display: flex; flex-direction: column; gap: 4px">
+        <span style="font-size: 13px; color: #B9BEC8; font-weight: 500">Balance del mes</span>
+        <span style="font-size: 38px; font-weight: 800; letter-spacing: -0.03em">$8,450.00</span>
+        <span style="font-size: 12px; color: #B9BEC8">Ahorras el 26.4% de tus ingresos</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+        <div style="background: #23262E; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 4px">
+          <span style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #B9BEC8; font-weight: 500">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7FCDE6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 7L7 17M15 17H7V9"></path></svg>Ingresos
+          </span>
+          <span style="font-size: 18px; font-weight: 700">$32,000.00</span>
+        </div>
+        <div style="background: #23262E; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 4px">
+          <span style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #B9BEC8; font-weight: 500">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F5A47C" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"></path></svg>Gastos
+          </span>
+          <span style="font-size: 18px; font-weight: 700">$23,550.00</span>
+        </div>
+      </div>
+    </section>
+
+    <section style="background: #FFFFFF; border-radius: 22px; padding: 16px; display: flex; flex-direction: column; gap: 14px">
+      <div style="display: flex; justify-content: space-between; align-items: baseline">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 700">Gastos por categoría</h2>
+        <a href="Categorias.dc.html" style="font-size: 13px; font-weight: 700">Ver todo</a>
+      </div>
+      <div style="display: flex; height: 10px; border-radius: 999px; overflow: hidden; gap: 2px">
+        <sc-for list="{{cats}}" as="s" hint-placeholder-count="7">
+          <div style="height: 10px; width: {{s.w}}; background: {{s.color}}"></div>
+        </sc-for>
+      </div>
+      <sc-for list="{{top}}" as="c" hint-placeholder-count="3">
+        <div style="display: flex; align-items: center; gap: 12px">
+          <div style="width: 40px; height: 40px; border-radius: 12px; background: {{c.tint}}; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{c.color}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{c.icon}}"></path></svg>
+          </div>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0">
+            <div style="display: flex; justify-content: space-between; gap: 8px">
+              <span style="font-size: 14px; font-weight: 600">{{c.name}}</span>
+              <span style="font-size: 14px; font-weight: 700">{{c.amount}}</span>
+            </div>
+            <div style="height: 6px; background: #EEF0EC; border-radius: 999px; overflow: hidden">
+              <div style="height: 6px; width: {{c.bar}}; background: {{c.color}}; border-radius: 999px"></div>
+            </div>
+          </div>
+          <span style="font-size: 12px; color: #5B616E; width: 40px; text-align: right; font-weight: 600">{{c.pct}}</span>
+        </div>
+      </sc-for>
+    </section>
+
+    <section style="background: #FFFFFF; border-radius: 22px; padding: 16px; display: flex; flex-direction: column; gap: 8px">
+      <div style="display: flex; justify-content: space-between; align-items: baseline">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 700">Últimos movimientos</h2>
+        <a href="Movimientos.dc.html" style="font-size: 13px; font-weight: 700">Ver todos</a>
+      </div>
+      <sc-for list="{{recent}}" as="t" hint-placeholder-count="3">
+        <div style="display: flex; align-items: center; gap: 12px; padding: 6px 0">
+          <div style="width: 40px; height: 40px; border-radius: 12px; background: {{t.tint}}; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{t.color}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{t.icon}}"></path></svg>
+          </div>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0">
+            <span style="font-size: 14px; font-weight: 600">{{t.name}}</span>
+            <span style="font-size: 12px; color: #5B616E">{{t.meta}}</span>
+          </div>
+          <span style="font-size: 14px; font-weight: 700; color: {{t.amtColor}}">{{t.amount}}</span>
+        </div>
+      </sc-for>
+    </section>
+  </main>
+
+  <nav aria-label="Navegación principal" style="height: 84px; flex-shrink: 0; background: #FFFFFF; border-top: 1px solid #E4E6E1; display: flex; align-items: flex-start; justify-content: space-around; padding: 6px 8px 0; box-sizing: border-box">
+    <a href="Main.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; color: #15171C; min-width: 60px; min-height: 44px; padding-top: 6px">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"></path></svg>Inicio
+    </a>
+    <a href="Movimientos.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: #5B616E; min-width: 60px; min-height: 44px; padding-top: 6px">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"></path></svg>Movimientos
+    </a>
+    <a href="Agregar.dc.html" aria-label="Agregar movimiento" style="width: 56px; height: 56px; border-radius: 18px; background: #15171C; color: #FFFFFF; display: flex; align-items: center; justify-content: center; margin-top: -2px">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+    </a>
+    <a href="Categorias.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: #5B616E; min-width: 60px; min-height: 44px; padding-top: 6px">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-9-9v9z"></path><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"></path></svg>Resumen
+    </a>
+    <button style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: #5B616E; min-width: 60px; min-height: 44px; padding-top: 6px; background: none; border: 0; font-family: inherit; cursor: pointer">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"></path><circle cx="16" cy="7" r="2"></circle><circle cx="8" cy="17" r="2"></circle></svg>Ajustes
+    </button>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var I = {
+      hogar: 'M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z',
+      alimentos: 'M3 4h2l2.4 11h11.2L21 8H6.2M9 20h.01M18 20h.01',
+      transporte: 'M5 16v-5l2-5h10l2 5v5M5 16h14M5 16v2M19 16v2M7.5 13h.01M16.5 13h.01',
+      servicios: 'M13 3L5 14h6l-1 7 8-11h-6z',
+      entretenimiento: 'M3 9a2 2 0 0 0 0 6v3h18v-3a2 2 0 0 0 0-6V6H3zM13 6v12',
+      compras: 'M6 7h12l-1 13H7zM9 7a3 3 0 0 1 6 0',
+      salud: 'M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z',
+      ingreso: 'M17 7L7 17M15 17H7V9'
+    };
+    var C = {
+      hogar: { name: 'Hogar', color: '#5B6472', tint: '#ECEEF1' },
+      alimentos: { name: 'Alimentos', color: '#C25E14', tint: '#FCEBDD' },
+      transporte: { name: 'Transporte', color: '#9A7410', tint: '#F8EFD3' },
+      servicios: { name: 'Servicios', color: '#B03A6E', tint: '#F8E3EC' },
+      entretenimiento: { name: 'Entretenimiento', color: '#7444C0', tint: '#EEE6FA' },
+      compras: { name: 'Compras', color: '#2F5FC4', tint: '#E2EAFB' },
+      salud: { name: 'Salud', color: '#1E7F73', tint: '#DDF2EF' },
+      ingreso: { name: 'Ingreso', color: '#0B6A86', tint: '#DDF0F6' }
+    };
+    var data = [
+      ['hogar', '$8,500.00', 36.1], ['alimentos', '$6,240.00', 26.5], ['transporte', '$2,180.00', 9.3],
+      ['servicios', '$1,950.00', 8.3], ['entretenimiento', '$1,620.00', 6.9], ['compras', '$1,610.00', 6.8], ['salud', '$1,450.00', 6.2]
+    ];
+    var cats = data.map(function (d) {
+      var c = C[d[0]];
+      return { name: c.name, color: c.color, tint: c.tint, icon: I[d[0]], amount: d[1], pct: d[2] + '%', w: d[2] + '%', bar: Math.round(d[2] / 36.1 * 100) + '%' };
+    });
+    var tx = [
+      ['alimentos', 'Superama', 'Alimentos · Hoy', '−$842.50'],
+      ['transporte', 'Uber', 'Transporte · Hoy', '−$126.00'],
+      ['ingreso', 'Pago freelance', 'Ingreso · Ayer', '+$4,000.00']
+    ];
+    var recent = tx.map(function (t) {
+      var c = C[t[0]];
+      return { name: t[1], meta: t[2], amount: t[3], icon: I[t[0]], color: c.color, tint: c.tint, amtColor: t[0] === 'ingreso' ? '#0B6A86' : '#15171C' };
+    });
+    return { cats: cats, top: cats.slice(0, 3), recent: recent };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Resumen por categoría</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+body{margin:0}
+a{color:#0B6A86;text-decoration:none}a:hover{color:#08506A}
+</style>
+</helmet>
+<div style="width: 390px; height: 1200px; box-sizing: border-box; background: #F3F4F1; font-family: Manrope, system-ui, sans-serif; color: #15171C; display: flex; flex-direction: column; overflow: hidden; font-variant-numeric: tabular-nums">
+  <main style="flex: 1; display: flex; flex-direction: column; gap: 16px; padding: 52px 20px 16px">
+    <div style="display: flex; align-items: center; justify-content: space-between">
+      <h1 style="margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -0.02em">Resumen</h1>
+      <button style="height: 36px; padding: 0 12px; border-radius: 999px; border: 1px solid #DADDD6; background: #FFFFFF; font-family: inherit; font-size: 13px; font-weight: 600; color: #15171C; display: flex; align-items: center; gap: 6px; cursor: pointer">
+        Octubre 2026
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+      </button>
+    </div>
+
+    <section style="background: #FFFFFF; border-radius: 22px; padding: 20px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px">
+      <div style="position: relative; width: 200px; height: 200px">
+        <svg width="200" height="200" viewBox="0 0 200 200" role="img" aria-label="Distribución de gastos de octubre por categoría">
+          <g transform="rotate(-90 100 100)" fill="none" stroke-width="22">
+            <circle cx="100" cy="100" r="70" stroke="#5B6472" stroke-dasharray="155.74 439.82" stroke-dashoffset="0"></circle>
+            <circle cx="100" cy="100" r="70" stroke="#E07A2E" stroke-dasharray="113.54 439.82" stroke-dashoffset="-158.74"></circle>
+            <circle cx="100" cy="100" r="70" stroke="#D4A72C" stroke-dasharray="37.71 439.82" stroke-dashoffset="-275.28"></circle>
+            <circle cx="100" cy="100" r="70" stroke="#C2477D" stroke-dasharray="33.42 439.82" stroke-dashoffset="-315.99"></circle>
+            <circle cx="100" cy="100" r="70" stroke="#8E5BD6" stroke-dasharray="27.25 439.82" stroke-dashoffset="-352.41"></circle>
+            <circle cx="100" cy="100" r="70" stroke="#3B6FD8" stroke-dasharray="27.07 439.82" stroke-dashoffset="-382.66"></circle>
+            <circle cx="100" cy="100" r="70" stroke="#2A9D8F" stroke-dasharray="24.08 439.82" stroke-dashoffset="-412.73"></circle>
+          </g>
+        </svg>
+        <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px">
+          <span style="font-size: 12px; color: #5B616E; font-weight: 600">Gastado</span>
+          <span style="font-size: 22px; font-weight: 800; letter-spacing: -0.02em">$23,550</span>
+          <span style="font-size: 12px; color: #5B616E">de $32,000</span>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; width: 100%">
+        <div style="background: #F3F4F1; border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px">
+          <span style="font-size: 12px; color: #5B616E; font-weight: 600">Promedio diario</span>
+          <span style="font-size: 16px; font-weight: 800">$759.68</span>
+        </div>
+        <div style="background: #F3F4F1; border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px">
+          <span style="font-size: 12px; color: #5B616E; font-weight: 600">vs septiembre</span>
+          <span style="font-size: 16px; font-weight: 800; color: #B93D0B">+2.5%</span>
+        </div>
+      </div>
+    </section>
+
+    <section style="background: #FFFFFF; border-radius: 22px; padding: 16px; display: flex; flex-direction: column; gap: 4px">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 6px">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 700">Por categoría</h2>
+        <span style="font-size: 12px; color: #5B616E; font-weight: 600">vs mes anterior</span>
+      </div>
+      <sc-for list="{{cats}}" as="c" hint-placeholder-count="7">
+        <div style="display: flex; align-items: center; gap: 12px; padding: 8px 0">
+          <div style="width: 40px; height: 40px; border-radius: 12px; background: {{c.tint}}; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{c.ink}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{c.icon}}"></path></svg>
+          </div>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0">
+            <span style="font-size: 14px; font-weight: 600">{{c.name}}</span>
+            <span style="font-size: 12px; color: #5B616E">{{c.pct}} del gasto</span>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px">
+            <span style="font-size: 14px; font-weight: 700">{{c.amount}}</span>
+            <span style="font-size: 12px; font-weight: 700; color: {{c.deltaColor}}">{{c.delta}}</span>
+          </div>
+        </div>
+      </sc-for>
+    </section>
+
+    <section style="background: #FFFFFF; border-radius: 22px; padding: 16px; display: flex; flex-direction: column; gap: 14px">
+      <div style="display: flex; justify-content: space-between; align-items: center">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 700">Últimos 6 meses</h2>
+        <div style="display: flex; gap: 12px; font-size: 12px; color: #5B616E; font-weight: 600">
+          <span style="display: flex; align-items: center; gap: 5px"><span style="width: 10px; height: 10px; border-radius: 3px; background: #0B6A86"></span>Ingresos</span>
+          <span style="display: flex; align-items: center; gap: 5px"><span style="width: 10px; height: 10px; border-radius: 3px; background: #E07A2E"></span>Gastos</span>
+        </div>
+      </div>
+      <div role="img" aria-label="Ingresos y gastos de mayo a octubre" style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; align-items: end; height: 170px; border-bottom: 1px solid #E4E6E1">
+        <sc-for list="{{months}}" as="m" hint-placeholder-count="6">
+          <div style="display: flex; justify-content: center; align-items: flex-end; gap: 3px; height: 170px">
+            <div style="width: 14px; height: {{m.hi}}; background: #0B6A86; border-radius: 4px 4px 0 0"></div>
+            <div style="width: 14px; height: {{m.hg}}; background: {{m.gColor}}; border-radius: 4px 4px 0 0"></div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; margin-top: -6px">
+        <sc-for list="{{months}}" as="m" hint-placeholder-count="6">
+          <span style="text-align: center; font-size: 12px; font-weight: {{m.weight}}; color: {{m.labelColor}}">{{m.label}}</span>
+        </sc-for>
+      </div>
+    </section>
+  </main>
+
+  <nav aria-label="Navegación principal" style="height: 84px; flex-shrink: 0; background: #FFFFFF; border-top: 1px solid #E4E6E1; display: flex; align-items: flex-start; justify-content: space-around; padding: 6px 8px 0; box-sizing: border-box">
+    <a href="Main.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: #5B616E; min-width: 60px; min-height: 44px; padding-top: 6px">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"></path></svg>Inicio
+    </a>
+    <a href="Movimientos.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: #5B616E; min-width: 60px; min-height: 44px; padding-top: 6px">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"></path></svg>Movimientos
+    </a>
+    <a href="Agregar.dc.html" aria-label="Agregar movimiento" style="width: 56px; height: 56px; border-radius: 18px; background: #15171C; color: #FFFFFF; display: flex; align-items: center; justify-content: center; margin-top: -2px">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+    </a>
+    <a href="Categorias.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; color: #15171C; min-width: 60px; min-height: 44px; padding-top: 6px">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-9-9v9z"></path><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"></path></svg>Resumen
+    </a>
+    <button style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: #5B616E; min-width: 60px; min-height: 44px; padding-top: 6px; background: none; border: 0; font-family: inherit; cursor: pointer">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"></path><circle cx="16" cy="7" r="2"></circle><circle cx="8" cy="17" r="2"></circle></svg>Ajustes
+    </button>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1200}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var I = {
+      hogar: 'M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z',
+      alimentos: 'M3 4h2l2.4 11h11.2L21 8H6.2M9 20h.01M18 20h.01',
+      transporte: 'M5 16v-5l2-5h10l2 5v5M5 16h14M5 16v2M19 16v2M7.5 13h.01M16.5 13h.01',
+      servicios: 'M13 3L5 14h6l-1 7 8-11h-6z',
+      entretenimiento: 'M3 9a2 2 0 0 0 0 6v3h18v-3a2 2 0 0 0 0-6V6H3zM13 6v12',
+      compras: 'M6 7h12l-1 13H7zM9 7a3 3 0 0 1 6 0',
+      salud: 'M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z'
+    };
+    var data = [
+      ['hogar', 'Hogar', '#5B6472', '#ECEEF1', '$8,500.00', '36.1%', 0],
+      ['alimentos', 'Alimentos', '#C25E14', '#FCEBDD', '$6,240.00', '26.5%', 8],
+      ['transporte', 'Transporte', '#9A7410', '#F8EFD3', '$2,180.00', '9.3%', -5],
+      ['servicios', 'Servicios', '#B03A6E', '#F8E3EC', '$1,950.00', '8.3%', 3],
+      ['entretenimiento', 'Entretenimiento', '#7444C0', '#EEE6FA', '$1,620.00', '6.9%', 22],
+      ['compras', 'Compras', '#2F5FC4', '#E2EAFB', '$1,610.00', '6.8%', -31],
+      ['salud', 'Salud', '#1E7F73', '#DDF2EF', '$1,450.00', '6.2%', 12]
+    ];
+    var cats = data.map(function (d) {
+      var delta = d[6] === 0 ? 'Igual' : (d[6] > 0 ? '↑ ' + d[6] + '%' : '↓ ' + Math.abs(d[6]) + '%');
+      return { name: d[1], ink: d[2], tint: d[3], icon: I[d[0]], amount: d[4], pct: d[5], delta: delta, deltaColor: d[6] > 0 ? '#B93D0B' : (d[6] < 0 ? '#0B6A86' : '#5B616E') };
+    });
+    var hist = [['May', 32000, 21300], ['Jun', 32000, 24100], ['Jul', 32000, 22750], ['Ago', 30000, 26400], ['Sep', 33500, 22980], ['Oct', 32000, 23550]];
+    var max = 34000;
+    var months = hist.map(function (h, i) {
+      var cur = i === hist.length - 1;
+      return {
+        label: h[0], hi: Math.round(h[1] / max * 160) + 'px', hg: Math.round(h[2] / max * 160) + 'px',
+        gColor: '#E07A2E', weight: cur ? '800' : '600', labelColor: cur ? '#15171C' : '#5B616E'
+      };
+    });
+    return { cats: cats, months: months };
+  }
+}
+</script>
+</body>
+</html>
