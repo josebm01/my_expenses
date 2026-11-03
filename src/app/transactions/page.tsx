@@ -79,18 +79,18 @@ async function TransactionsContent({ searchParams }: Pick<PageProps<"/transactio
       />
 
       <div className="grid grid-cols-2 gap-2.5">
-        <div className="flex flex-col gap-0.5 rounded-control bg-white px-3 py-2.5">
+        <div className="flex flex-col gap-0.5 rounded-control bg-surface px-3 py-2.5 shadow-card">
           <span className="text-xs font-semibold text-ink-soft">Ingresos</span>
           <span className="text-base font-extrabold text-income">{formatSignedCurrency(totals.income)}</span>
         </div>
-        <div className="flex flex-col gap-0.5 rounded-control bg-white px-3 py-2.5">
+        <div className="flex flex-col gap-0.5 rounded-control bg-surface px-3 py-2.5 shadow-card">
           <span className="text-xs font-semibold text-ink-soft">Gastos</span>
           <span className="text-base font-extrabold text-expense">{formatSignedCurrency(-totals.expenses)}</span>
         </div>
       </div>
 
       {groups.length === 0 ? (
-        <p className="rounded-[18px] bg-white px-4 py-10 text-center text-sm text-ink-soft">
+        <p className="rounded-[18px] bg-surface shadow-card px-4 py-10 text-center text-sm text-ink-soft">
           {query ? `No hay movimientos que coincidan con “${query}”.` : "Sin movimientos este mes."}
         </p>
       ) : (
@@ -100,9 +100,15 @@ async function TransactionsContent({ searchParams }: Pick<PageProps<"/transactio
               <h2 className="font-bold">{formatDayHeading(group.day, today)}</h2>
               <span className="font-semibold">{formatSignedCurrency(group.total)}</span>
             </div>
-            <ul className="flex flex-col rounded-[18px] bg-white px-3.5 py-1">
+            <ul className="flex flex-col rounded-[18px] bg-surface shadow-card px-3.5 py-1">
               {group.transactions.map((t) => (
-                <TransactionRow key={t.id} transaction={t} meta={rowMeta(t)} className="py-2.5" />
+                <TransactionRow
+                  key={t.id}
+                  transaction={t}
+                  meta={rowMeta(t)}
+                  href={`/transactions/${t.id}`}
+                  className="py-2.5"
+                />
               ))}
             </ul>
           </section>
