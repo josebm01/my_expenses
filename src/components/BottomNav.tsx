@@ -44,7 +44,14 @@ export function BottomNav() {
 function CurrentBottomNav() {
   const pathname = usePathname();
   // Las pantallas de formulario tienen su propio botón de cerrar; el login no lleva navegación.
-  if (pathname.startsWith("/new") || pathname.startsWith("/categories/") || pathname === "/login") return null;
+  if (
+    pathname.startsWith("/new") ||
+    pathname.startsWith("/transactions/") ||
+    pathname.startsWith("/categories/") ||
+    pathname === "/login"
+  ) {
+    return null;
+  }
 
   return (
     <nav
