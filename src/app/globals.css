@@ -72,6 +72,8 @@
   --color-expense: #b93d0b;
   --color-expense-chart: #e07a2e;
   --color-expense-on-dark: #f5a47c;
+  /* Balance negativo sobre los paneles oscuros (BalanceCard, KpiCards). */
+  --color-negative-on-dark: #ff6b6b;
   --color-night: #23262e;
   --color-night-muted: #b9bec8;
   --color-sidebar-active: #2a2d35;

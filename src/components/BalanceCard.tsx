@@ -30,7 +30,9 @@ export function BalanceCard({ totals, className }: { totals: MonthTotals; classN
         className={cn("-m-1 flex cursor-pointer flex-col gap-1 rounded-control p-1 text-left", focusRing)}
       >
         <span className="text-[13px] font-medium text-night-muted">Balance del mes</span>
-        <span className="text-[38px] leading-tight font-extrabold tracking-[-0.03em]">{formatCurrency(balance)}</span>
+        <span className={cn("text-[38px] leading-tight font-extrabold tracking-[-0.03em]", balance < 0 && "text-negative-on-dark")}>
+          {formatCurrency(balance)}
+        </span>
         {savingsRate !== null && (
           <span className="text-xs text-night-muted">
             {savingsRate >= 0
