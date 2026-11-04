@@ -22,7 +22,9 @@ export function KpiCards({ totals, className }: { totals: MonthTotals; className
     <div role="group" aria-label="Filtrar últimos movimientos" className={cn("grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4", className)}>
       <button type="button" aria-pressed={filter === "all"} onClick={() => setFilter("all")} className={cn(button, "bg-panel text-white")}>
         <span className={cn(label, "text-night-muted")}>Balance del mes</span>
-        <span className="text-[30px] font-extrabold tracking-[-0.02em]">{formatCurrency(balance)}</span>
+        <span className={cn("text-[30px] font-extrabold tracking-[-0.02em]", balance < 0 && "text-negative-on-dark")}>
+          {formatCurrency(balance)}
+        </span>
       </button>
       <button
         type="button"

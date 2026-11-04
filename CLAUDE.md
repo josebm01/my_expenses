@@ -28,7 +28,7 @@ Al implementar una pantalla, ábrela y replica layout, espaciados, tamaños y co
 
 ### Tokens
 - Fondo `#F3F4F1`, texto `#15171C`, secundario `#5B616E`, bordes `#E4E6E1`, tarjetas blancas
-- Ingresos `#0B6A86` (azul), gastos `#B93D0B` (naranja). No usar verde/rojo.
+- Ingresos `#0B6A86` (azul), gastos `#B93D0B` (naranja). No usar verde/rojo; única excepción: el balance negativo va en rojo (`text-negative-on-dark`).
 - Fuente Manrope vía `next/font/google`; números con `tabular-nums`
 - Radios: tarjetas 20–22px, botones/inputs 14px, chips redondos completos
 - Touch targets mínimo 44px

@@ -10,6 +10,7 @@ const MONTH_NAMES = [
   "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
 ];
 const WEEKDAY_SHORT = ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"];
+const WEEKDAY_NAMES = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 
 const dayKeyFormatter = new Intl.DateTimeFormat("en-CA", {
   timeZone: TIME_ZONE,
@@ -28,6 +29,13 @@ export function toMonthKey(date: Date): MonthKey {
 
 export function todayKey(): DayKey {
   return toDayKey(new Date());
+}
+
+const hourFormatter = new Intl.DateTimeFormat("en-US", { timeZone: TIME_ZONE, hour: "numeric", hourCycle: "h23" });
+
+/** Hora actual (0–23) en la zona de la app. */
+export function currentHour(): number {
+  return Number(hourFormatter.format(new Date()));
 }
 
 export function parseMonthKey(value: unknown): MonthKey | null {
@@ -101,6 +109,13 @@ export function formatMonthShort(month: MonthKey): string {
 export function formatShortDate(day: DayKey): string {
   const { m, d } = splitKey(day);
   return `${d} ${MONTH_NAMES[m - 1].slice(0, 3).toLowerCase()}`;
+}
+
+/** "Miércoles 4 de noviembre" */
+export function formatLongDate(day: DayKey): string {
+  const { y, m, d } = splitKey(day);
+  const weekday = WEEKDAY_NAMES[new Date(Date.UTC(y, m - 1, d)).getUTCDay()];
+  return `${weekday} ${d} de ${MONTH_NAMES[m - 1].toLowerCase()}`;
 }
 
 /** "Hoy" · "Ayer" · "29 oct" */
