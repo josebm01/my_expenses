@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Suspense } from "react";
+import { SignOutButton } from "@/components/SignOutButton";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { cn } from "@/lib/utils";
 import { CATEGORIES_NAV, HOME, SETTINGS, SUMMARY, TRANSACTIONS, isActivePath } from "@/lib/navigation";
@@ -20,7 +21,9 @@ export function Sidebar() {
 }
 
 function CurrentSidebar() {
-  return <SidebarContent pathname={usePathname()} />;
+  const pathname = usePathname();
+  if (pathname === "/login") return null;
+  return <SidebarContent pathname={pathname} />;
 }
 
 /** Con `pathname` nulo no marca ninguna sección como activa. */
@@ -63,7 +66,10 @@ function SidebarContent({ pathname }: { pathname: string | null }) {
         })}
       </nav>
 
-      <ThemeToggle variant="sidebar" className="mt-auto" />
+      <div className="mt-auto flex flex-col gap-1">
+        <ThemeToggle variant="sidebar" />
+        <SignOutButton variant="sidebar" />
+      </div>
     </aside>
   );
 }

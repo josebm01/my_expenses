@@ -9,10 +9,12 @@ import { MonthArrowLink } from "@/components/MonthArrowLink";
 import { MonthlyHistoryCard } from "@/components/MonthlyHistoryCard";
 import { PageContainer } from "@/components/PageContainer";
 import { PageSkeleton } from "@/components/PageSkeleton";
+import { SignOutButton } from "@/components/SignOutButton";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { RecentTransactionsCard } from "@/components/RecentTransactionsCard";
 import { TransactionTypeFilter } from "@/components/TransactionTypeFilter";
 import { TransactionTypeView } from "@/components/TransactionTypeView";
+import { requireUser } from "@/lib/auth";
 import { formatMonthTitle, parseMonthKey, todayKey } from "@/lib/dates";
 import { getCategoryBreakdown, getMonthTotals, getMonthlyHistory, getRecentTransactions } from "@/lib/transactions";
 import { buildHref } from "@/lib/url";
@@ -29,6 +31,9 @@ export default function HomePage({ searchParams }: PageProps<"/">) {
 
 async function HomeContent({ searchParams }: Pick<PageProps<"/">, "searchParams">) {
   const { mes } = await searchParams;
+  const user = await requireUser();
+  const firstName = user.name.trim().split(/\s+/)[0];
+  const greeting = firstName ? `Hola, ${firstName} bienvenido` : "Hola bienvenido";
   // "Hoy" depende de la fecha de la petición, no del prerender/prefetch.
   await connection();
   const today = todayKey();
@@ -48,9 +53,12 @@ async function HomeContent({ searchParams }: Pick<PageProps<"/">, "searchParams"
   return (
     <>
       {/* Móvil: el cambio de tema va en su propio renglón para que el mes y las flechas quepan en 375px. */}
-      <div className="-mb-3 flex items-center justify-between lg:hidden">
-        <span className="text-[13px] font-medium text-ink-soft">Hola, Jose</span>
-        <ThemeToggle variant="icon" />
+      <div className="-mb-3 flex items-center justify-between lg:-mb-4">
+        <span className="text-[13px] font-medium text-ink-soft lg:text-[15px]">{greeting}</span>
+        <div className="flex gap-2 lg:hidden">
+          <ThemeToggle variant="icon" />
+          <SignOutButton variant="icon" />
+        </div>
       </div>
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">

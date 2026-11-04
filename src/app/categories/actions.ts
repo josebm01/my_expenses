@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { requireUser } from "@/lib/auth";
 import {
   countActiveCategories,
   createCategory,
@@ -28,6 +29,7 @@ async function findCategory(formData: FormData) {
 }
 
 export async function saveCategoryAction(_previous: CategoryFormState, formData: FormData): Promise<CategoryFormState> {
+  await requireUser();
   const existing = await findCategory(formData);
   if (formData.get("id") && !existing) return { error: "Esta categoría ya no existe." };
 
@@ -53,6 +55,7 @@ export async function saveCategoryAction(_previous: CategoryFormState, formData:
 }
 
 export async function deleteCategoryAction(_previous: CategoryFormState, formData: FormData): Promise<CategoryFormState> {
+  await requireUser();
   const category = await findCategory(formData);
   if (!category) return { error: "Esta categoría ya no existe." };
   if ((await countActiveCategories(category.type)) <= 1) {

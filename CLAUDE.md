@@ -50,3 +50,7 @@ Eliminar una categoría con movimientos la archiva (`archivedAt`): deja de ofrec
 - Componentes en `src/components/`, uno por archivo, PascalCase.
 - Lógica de datos en `src/lib/` (p. ej. `src/lib/transactions.ts`); las páginas no llaman a Prisma directamente.
 - Server Components por defecto; `"use client"` solo cuando haga falta estado o eventos.
+
+## Autenticación
+- Login con Google vía Better Auth sin base de datos (`src/lib/auth.ts`); solo entra `ALLOWED_EMAIL`.
+- `src/proxy.ts` redirige a `/login` sin sesión, pero no basta: toda Server Action o Route Handler nuevo debe empezar con `await requireUser()`.

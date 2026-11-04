@@ -55,6 +55,15 @@ Estas credenciales son solo para desarrollo local. La app las toma de `DATABASE_
 
 Para borrar todos los datos y empezar de cero: `docker compose down -v`, y luego repetir `db:up`, `migrate dev` y `db:seed`.
 
+## Inicio de sesión
+
+La app pide entrar con Google ([Better Auth](https://better-auth.com), sin tablas: la sesión es una cookie cifrada que dura 90 días). Solo entra el correo de `ALLOWED_EMAIL`; si está vacío, no entra nadie.
+
+1. En [Google Cloud Console](https://console.cloud.google.com/apis/credentials) crea un **ID de cliente de OAuth** de tipo *Aplicación web*.
+2. En **URIs de redireccionamiento autorizados** agrega `http://localhost:3000/api/auth/callback/google` (y la de producción, p. ej. `https://tu-dominio/api/auth/callback/google`).
+3. Copia el ID y el secreto a `GOOGLE_CLIENT_ID` y `GOOGLE_CLIENT_SECRET` en `.env`, pon tu correo en `ALLOWED_EMAIL` y genera `BETTER_AUTH_SECRET` con `openssl rand -base64 32`.
+4. En producción, `BETTER_AUTH_URL` debe ser la URL pública de la app.
+
 ## Estructura
 
 ```

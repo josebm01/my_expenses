@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { requireUser } from "@/lib/auth";
 import { getActiveCategory } from "@/lib/categories";
 import { dayKeyToDate, parseDayKey, toDayKey } from "@/lib/dates";
 import { transactionOriginHref } from "@/lib/navigation";
@@ -32,6 +33,7 @@ export async function saveTransactionAction(
   _previous: TransactionFormState,
   formData: FormData,
 ): Promise<TransactionFormState> {
+  await requireUser();
   const existing = await findTransaction(formData);
   if (formData.get("id") && !existing) return { error: "Este movimiento ya no existe." };
 
@@ -77,6 +79,7 @@ export async function deleteTransactionAction(
   _previous: TransactionFormState,
   formData: FormData,
 ): Promise<TransactionFormState> {
+  await requireUser();
   const transaction = await findTransaction(formData);
   if (!transaction) return { error: "Este movimiento ya no existe." };
 
