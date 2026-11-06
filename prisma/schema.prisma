@@ -43,9 +43,9 @@ model Transaction {
   note       String?
   date       DateTime        @db.Timestamptz(3)
   createdAt  DateTime        @default(now()) @map("created_at") @db.Timestamptz(3)
-  /// Gasto generado por un préstamo que cuenta en los totales. Se edita desde el préstamo y se borra con él.
-  loanId        String?      @unique @map("loan_id") @db.Uuid
-  loan          Loan?        @relation(fields: [loanId], references: [id], onDelete: Cascade)
+  /// Gasto generado por un monto prestado que cuenta en los totales. Se edita desde el préstamo y se borra con el monto.
+  loanItemId    String?      @unique @map("loan_item_id") @db.Uuid
+  loanItem      LoanItem?    @relation(fields: [loanItemId], references: [id], onDelete: Cascade)
   /// Ingreso generado por un abono de un préstamo que cuenta en los totales. Se borra con el abono.
   loanPaymentId String?      @unique @map("loan_payment_id") @db.Uuid
   loanPayment   LoanPayment? @relation(fields: [loanPaymentId], references: [id], onDelete: Cascade)
@@ -55,21 +55,35 @@ model Transaction {
   @@map("transactions")
 }
 
-/// Dinero que presté y me van abonando. El saldo pendiente se calcula con los abonos, no se almacena.
+/// Dinero que presté a alguien, en uno o varios montos, y me van abonando. El total y el saldo pendiente
+/// se calculan con los montos y los abonos, no se almacenan.
 model Loan {
   id            String        @id @default(uuid()) @db.Uuid
   /// A quién se le prestó.
   borrower      String
-  amount        Decimal       @db.Decimal(12, 2)
-  date          DateTime      @db.Timestamptz(3)
-  /// Si es true, el préstamo tiene un movimiento de gasto y cada abono uno de ingreso, con las categorías
+  /// Si es true, cada monto tiene un movimiento de gasto y cada abono uno de ingreso, con las categorías
   /// de sistema "Préstamos" (`loans` y `loan-repayments`).
   countInTotals Boolean       @default(true) @map("count_in_totals")
   createdAt     DateTime      @default(now()) @map("created_at") @db.Timestamptz(3)
+  items         LoanItem[]
   payments      LoanPayment[]
-  transaction   Transaction?
 
   @@map("loans")
+}
+
+/// Cada cosa que se prestó dentro de un préstamo ("Moto", "Préstamo de dinero").
+model LoanItem {
+  id          String       @id @default(uuid()) @db.Uuid
+  loanId      String       @map("loan_id") @db.Uuid
+  loan        Loan         @relation(fields: [loanId], references: [id], onDelete: Cascade)
+  concept     String
+  amount      Decimal      @db.Decimal(12, 2)
+  date        DateTime     @db.Timestamptz(3)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(3)
+  transaction Transaction?
+
+  @@index([loanId, date])
+  @@map("loan_items")
 }
 
 model LoanPayment {

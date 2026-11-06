@@ -41,9 +41,9 @@ Ingresos: Sueldo, Freelance, Ventas, Reembolso (color `#0B6A86`).
 Eliminar una categoría con movimientos la archiva (`archivedAt`): deja de ofrecerse, pero el historial la conserva.
 
 ### Préstamos (`/loans`)
-Dinero que el usuario presta y le van abonando (`loans`, `loan_payments`); el saldo pendiente se calcula, no se guarda.
-Con `countInTotals`, el préstamo genera un gasto y cada abono un ingreso en las categorías de sistema `loans` / `loan-repayments` ("Préstamos"), que no se ofrecen en "Nuevo movimiento" ni en `/categories`.
-Esos movimientos (con `loanId` / `loanPaymentId`) solo se cambian desde `src/lib/loans.ts`; la edición de movimientos redirige al préstamo.
+Dinero que el usuario presta a una persona (`loans`) en uno o varios montos con concepto (`loan_items`: "Moto", "Préstamo de dinero") y que le van abonando al total (`loan_payments`); el total y el saldo pendiente se calculan, no se guardan.
+Con `countInTotals`, cada monto genera un gasto y cada abono un ingreso en las categorías de sistema `loans` / `loan-repayments` ("Préstamos"), que no se ofrecen en "Nuevo movimiento" ni en `/categories`.
+Esos movimientos (con `loanItemId` / `loanPaymentId`) solo se cambian desde `src/lib/loans.ts`; la edición de movimientos redirige al préstamo.
 
 ## Reglas de datos
 - Montos siempre `Decimal` (Prisma `@db.Decimal(12, 2)`), nunca `Float`.

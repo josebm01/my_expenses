@@ -12,13 +12,14 @@ export interface Transaction {
   concept: string | null;
   note: string | null;
   date: Date;
-  /** Préstamo que generó el movimiento (el préstamo o uno de sus abonos); se edita desde ahí. */
+  /** Préstamo que generó el movimiento (uno de sus montos o abonos); se edita desde ahí. */
   loanId: string | null;
 }
 
 const newestFirst: Prisma.TransactionOrderByWithRelationInput[] = [{ date: "desc" }, { createdAt: "desc" }];
 const withCategory = {
   category: true,
+  loanItem: { select: { loanId: true } },
   loanPayment: { select: { loanId: true } },
 } satisfies Prisma.TransactionInclude;
 
@@ -41,7 +42,7 @@ function toTransaction(record: TransactionRecord): Transaction {
     concept: record.concept,
     note: record.note,
     date: record.date,
-    loanId: record.loanId ?? record.loanPayment?.loanId ?? null,
+    loanId: record.loanItem?.loanId ?? record.loanPayment?.loanId ?? null,
   };
 }
 
