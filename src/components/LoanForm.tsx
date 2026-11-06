@@ -1,40 +1,58 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, useState } from "react";
-import { X } from "lucide-react";
-import { deleteLoanAction, saveLoanAction, type LoanFormState } from "@/app/loans/actions";
+import { useActionState, useRef, useState } from "react";
+import { Plus, Trash2, X } from "lucide-react";
+import { saveLoanAction, type LoanFormState } from "@/app/loans/actions";
 import { CategoryIcon } from "@/components/CategoryIcon";
-import { toDayKey, type DayKey } from "@/lib/dates";
+import type { DayKey } from "@/lib/dates";
 import { formatCurrency, sanitizeAmount } from "@/lib/format";
-import { BORROWER_MAX_LENGTH, LOAN_ICON } from "@/lib/loan-constants";
+import {
+  BORROWER_MAX_LENGTH,
+  LOAN_ICON,
+  LOAN_ITEM_CONCEPT_MAX_LENGTH,
+  MAX_ITEMS_ON_CREATE,
+} from "@/lib/loan-constants";
 import type { Loan } from "@/lib/loans";
 
 interface LoanFormProps {
   today: DayKey;
-  /** Sin `loan` se registra uno nuevo. */
+  /** Sin `loan` se registra uno nuevo, con sus montos; con `loan` solo se editan la persona y la opción. */
   loan?: Loan;
 }
 
-const inputClass =
-  "h-12 rounded-control border border-line-strong bg-surface px-3.5 text-[15px] text-ink placeholder:text-placeholder";
+interface ItemDraft {
+  key:     number;
+  concept: string;
+  amount:  string;
+  date:    DayKey;
+}
+
+const loanInputClass =
+  "h-12 w-full min-w-0 rounded-control border border-line-strong bg-surface px-3.5 text-[15px] text-ink placeholder:text-placeholder";
 
 export function LoanForm({ today, loan }: LoanFormProps) {
   const [saveState, saveAction, isSaving] = useActionState<LoanFormState, FormData>(saveLoanAction, { error: null });
-  const [deleteState, deleteAction, isDeleting] = useActionState<LoanFormState, FormData>(deleteLoanAction, {
-    error: null,
-  });
+  
   // Controlados: React reinicia los campos no controlados al terminar la acción, incluso si hubo error.
   const [borrower, setBorrower] = useState(loan?.borrower ?? "");
-  const [amount, setAmount] = useState(() => loan?.amount.toFixed(2).replace(/\.00$/, "") ?? "");
-  const [date, setDate] = useState(() => (loan ? toDayKey(loan.date) : today));
   const [countInTotals, setCountInTotals] = useState(loan?.countInTotals ?? true);
-  const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const [items, setItems] = useState<ItemDraft[]>([{ key: 0, concept: "", amount: "", date: today }]);
+  const nextKey = useRef(1);
 
   const closeHref = loan ? `/loans/${loan.id}` : "/loans";
+  const total = items.reduce((sum, i) => sum + (Number(i.amount) || 0), 0);
+
+  function updateItem(key: number, changes: Partial<ItemDraft>) {
+    setItems((current) => current.map((i) => (i.key === key ? { ...i, ...changes } : i)));
+  }
+
+  function addItem() {
+    setItems((current) => [...current, { key: nextKey.current++, concept: "", amount: "", date: today }]);
+  }
 
   return (
-    <form action={saveAction} className="flex min-h-full flex-1 flex-col gap-[18px]">
+    <form action={saveAction} className="flex min-h-full flex-1 flex-col gap-4.5">
       <input type="hidden" name="loanId" value={loan?.id ?? ""} />
 
       <div className="flex items-center justify-between">
@@ -63,50 +81,91 @@ export function LoanForm({ today, loan }: LoanFormProps) {
           value={borrower}
           onChange={(event) => setBorrower(event.target.value)}
           placeholder="Ej. Mi hermano"
-          className={inputClass}
+          className={loanInputClass}
         />
       </label>
 
-      <label className="flex flex-col gap-2">
-        <span className="text-[13px] font-bold">Monto prestado</span>
-        <span className="relative flex">
-          <span className="pointer-events-none absolute inset-y-0 left-3.5 flex items-center text-[15px] font-semibold text-ink-soft">
-            $
-          </span>
-          <input
-            name="amount"
-            inputMode="decimal"
-            autoComplete="off"
-            required
-            value={amount}
-            onChange={(event) => setAmount(sanitizeAmount(event.target.value))}
-            placeholder="0.00"
-            className={`${inputClass} w-full pl-7 font-semibold`}
-          />
-        </span>
-        {loan && loan.paid > 0 && (
-          <span className="text-xs text-ink-soft">Ya te abonaron {formatCurrency(loan.paid)}.</span>
-        )}
-      </label>
+      {!loan && (
+        <fieldset className="flex flex-col gap-2.5">
+          <legend className="mb-2.5 flex w-full items-baseline justify-between text-[13px] font-bold">
+            ¿Qué le prestaste?
+            {items.length > 1 && <span className="font-semibold text-ink-soft">Total {formatCurrency(total)}</span>}
+          </legend>
 
-      <label className="flex flex-col gap-2">
-        <span className="text-[13px] font-bold">Fecha del préstamo</span>
-        <input
-          type="date"
-          name="date"
-          required
-          max={today}
-          value={date}
-          onChange={(event) => setDate(event.target.value)}
-          className={inputClass}
-        />
-      </label>
+          {items.map((item, index) => (
+            <div key={item.key} className="flex flex-col gap-2 rounded-control bg-surface p-3 shadow-card">
+              <div className="flex items-center gap-2">
+                <input
+                  name="itemConcept"
+                  required
+                  maxLength={LOAN_ITEM_CONCEPT_MAX_LENGTH}
+                  autoComplete="off"
+                  value={item.concept}
+                  onChange={(event) => updateItem(item.key, { concept: event.target.value })}
+                  placeholder={index === 0 ? "Ej. Moto" : "Ej. Préstamo de dinero"}
+                  aria-label={`Concepto del monto ${index + 1}`}
+                  className={loanInputClass}
+                />
+                {items.length > 1 && (
+                  <button
+                    type="button"
+                    aria-label={`Quitar monto ${index + 1}`}
+                    onClick={() => setItems((current) => current.filter((i) => i.key !== item.key))}
+                    className="flex size-11 shrink-0 items-center justify-center rounded-control text-ink-soft hover:bg-canvas hover:text-expense"
+                  >
+                    <Trash2 className="size-4.5" aria-hidden />
+                  </button>
+                )}
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <span className="relative flex">
+                  <span className="pointer-events-none absolute inset-y-0 left-3.5 flex items-center text-[15px] font-semibold text-ink-soft">
+                    $
+                  </span>
+                  <input
+                    name="itemAmount"
+                    inputMode="decimal"
+                    autoComplete="off"
+                    required
+                    value={item.amount}
+                    onChange={(event) => updateItem(item.key, { amount: sanitizeAmount(event.target.value) })}
+                    placeholder="0.00"
+                    aria-label={`Monto ${index + 1}`}
+                    className={`${loanInputClass} pl-7 font-semibold`}
+                  />
+                </span>
+                <input
+                  type="date"
+                  name="itemDate"
+                  required
+                  max={today}
+                  value={item.date}
+                  onChange={(event) => updateItem(item.key, { date: event.target.value })}
+                  aria-label={`Fecha del monto ${index + 1}`}
+                  className={loanInputClass}
+                />
+              </div>
+            </div>
+          ))}
+
+          {items.length < MAX_ITEMS_ON_CREATE && (
+            <button
+              type="button"
+              onClick={addItem}
+              className="flex h-12 items-center justify-center gap-1.5 rounded-control border-2 border-dashed border-line-strong text-sm font-bold text-ink-soft hover:bg-surface"
+            >
+              <Plus className="size-4.5" aria-hidden />
+              Agregar otro monto
+            </button>
+          )}
+        </fieldset>
+      )}
 
       <label className="flex cursor-pointer items-start gap-3 rounded-control bg-surface p-3.5 shadow-card">
         <span className="flex min-w-0 flex-1 flex-col gap-0.5">
           <span className="text-sm font-bold">Contar en mis gastos</span>
           <span className="text-xs text-ink-soft">
-            El préstamo aparece como gasto y cada abono como ingreso, con la categoría Préstamos.
+            Cada monto aparece como gasto y cada abono como ingreso, con la categoría Préstamos.
           </span>
         </span>
         <input
@@ -123,62 +182,25 @@ export function LoanForm({ today, loan }: LoanFormProps) {
         />
       </label>
 
+      { loan && <p className="px-1 text-xs text-ink-soft">Los montos y abonos se agregan o borran desde el detalle del préstamo, igual que el préstamo completo.</p> }
+
       <div className="flex-1" />
 
-      {saveState.error && (
-        <p role="alert" className="text-center text-sm font-semibold text-expense">
-          {saveState.error}
-        </p>
-      )}
+      {
+        saveState.error && (
+          <p role="alert" className="text-center text-sm font-semibold text-expense">
+            {saveState.error}
+          </p>
+        )
+      }
 
       <button
         type="submit"
-        disabled={isSaving || isDeleting}
+        disabled={isSaving}
         className="h-14 shrink-0 rounded-2xl bg-ink text-base font-bold text-on-ink hover:bg-ink/90 disabled:opacity-60"
       >
         {isSaving ? "Guardando…" : loan ? "Guardar cambios" : "Guardar préstamo"}
       </button>
-
-      {loan &&
-        (confirmingDelete ? (
-          <div className="flex flex-col gap-3 rounded-card bg-surface p-4 shadow-card">
-            <p className="text-sm text-ink">
-              ¿Eliminar el préstamo a <strong>{loan.borrower}</strong>? También se borran sus abonos y sus movimientos. No
-              se puede deshacer.
-            </p>
-            {deleteState.error && (
-              <p role="alert" className="text-sm font-semibold text-expense">
-                {deleteState.error}
-              </p>
-            )}
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => setConfirmingDelete(false)}
-                className="h-11 rounded-control border border-line-strong bg-surface text-sm font-bold text-ink hover:bg-canvas"
-              >
-                Cancelar
-              </button>
-              <button
-                type="submit"
-                formAction={deleteAction}
-                formNoValidate
-                disabled={isSaving || isDeleting}
-                className="h-11 rounded-control bg-expense text-sm font-bold text-on-ink hover:bg-expense/90 disabled:opacity-60"
-              >
-                {isDeleting ? "Eliminando…" : "Sí, eliminar"}
-              </button>
-            </div>
-          </div>
-        ) : (
-          <button
-            type="button"
-            onClick={() => setConfirmingDelete(true)}
-            className="h-11 shrink-0 rounded-control text-sm font-bold text-expense hover:bg-surface"
-          >
-            Eliminar préstamo
-          </button>
-        ))}
     </form>
   );
 }

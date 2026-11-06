@@ -1,38 +1,48 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useState, type ReactNode } from "react";
 import { Trash2 } from "lucide-react";
-import { deleteLoanPaymentAction, type LoanFormState } from "@/app/loans/actions";
-import { formatCurrency, formatSignedCurrency } from "@/lib/format";
+import { deleteLoanItemAction, deleteLoanPaymentAction, type LoanFormState } from "@/app/loans/actions";
+import { cn } from "@/lib/utils";
 
-interface LoanPaymentRowProps {
+interface LoanEntryRowProps {
+  kind: "item" | "payment";
   loanId: string;
-  paymentId: string;
-  amount: number;
-  /** Fecha ya formateada ("12 nov 2026"). */
-  dateLabel: string;
-  /** Saldo pendiente después del abono. */
-  balance: number;
+  entryId: string;
+  title: string;
+  meta: string;
+  /** Monto ya formateado, con el color del tipo. */
+  amount: string;
+  /** Columna derecha opcional (saldo después del abono). */
+  aside?: ReactNode;
+  /** Texto de la confirmación de borrado. */
+  confirmText: ReactNode;
 }
 
-export function LoanPaymentRow({ loanId, paymentId, amount, dateLabel, balance }: LoanPaymentRowProps) {
-  const [state, action, isPending] = useActionState<LoanFormState, FormData>(deleteLoanPaymentAction, { error: null });
+/** Fila de un monto prestado o de un abono, con borrado confirmado en línea. */
+export function LoanEntryRow({ kind, loanId, entryId, title, meta, amount, aside, confirmText }: LoanEntryRowProps) {
+  const [state, action, isPending] = useActionState<LoanFormState, FormData>(
+    kind === "item" ? deleteLoanItemAction : deleteLoanPaymentAction,
+    { error: null },
+  );
   const [confirming, setConfirming] = useState(false);
 
   return (
     <li className="flex flex-col gap-2 py-2.5">
       <div className="flex items-center gap-3">
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-          <span className="text-sm font-bold text-income">{formatSignedCurrency(amount)}</span>
-          <span className="truncate text-xs text-ink-soft">Abono · {dateLabel}</span>
+          <span className="truncate text-sm font-semibold">{title}</span>
+          <span className="truncate text-xs text-ink-soft">{meta}</span>
         </div>
         <div className="flex flex-col items-end gap-0.5">
-          <span className="text-sm font-semibold whitespace-nowrap">{formatCurrency(balance)}</span>
-          <span className="text-xs text-ink-soft">{balance > 0 ? "pendiente" : "liquidado"}</span>
+          <span className={cn("text-sm font-bold whitespace-nowrap", kind === "item" ? "text-expense" : "text-income")}>
+            {amount}
+          </span>
+          {aside}
         </div>
         <button
           type="button"
-          aria-label={`Borrar abono de ${formatCurrency(amount)} del ${dateLabel}`}
+          aria-label={`Borrar ${kind === "item" ? "monto" : "abono"}: ${title}, ${meta}`}
           aria-expanded={confirming}
           onClick={() => setConfirming((value) => !value)}
           className="-mr-2 flex size-11 shrink-0 items-center justify-center rounded-control text-ink-soft hover:bg-canvas hover:text-expense"
@@ -44,13 +54,9 @@ export function LoanPaymentRow({ loanId, paymentId, amount, dateLabel, balance }
       {confirming && (
         <form action={action} className="flex flex-wrap items-center gap-2 rounded-control bg-canvas p-2.5">
           <input type="hidden" name="loanId" value={loanId} />
-          <input type="hidden" name="paymentId" value={paymentId} />
-          <p className="min-w-0 flex-1 text-[13px]">
-            {state.error ?? (
-              <>
-                ¿Borrar este abono? El saldo vuelve a <strong>{formatCurrency(balance + amount)}</strong>.
-              </>
-            )}
+          <input type="hidden" name="entryId" value={entryId} />
+          <p role={state.error ? "alert" : undefined} className={cn("min-w-0 flex-1 text-[13px]", state.error && "font-semibold text-expense")}>
+            {state.error ?? confirmText}
           </p>
           <div className="flex gap-2">
             <button
