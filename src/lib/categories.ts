@@ -1,3 +1,4 @@
+import "server-only";
 import type { Prisma, Category as CategoryRecord } from "@/generated/prisma/client";
 import {
   CATEGORY_PALETTES,

@@ -1,3 +1,4 @@
+import "server-only";
 import type { Prisma } from "@/generated/prisma/client";
 import { LOAN_CATEGORY_ID, LOAN_REPAYMENT_CATEGORY_ID } from "./categories";
 import { prisma } from "./prisma";
