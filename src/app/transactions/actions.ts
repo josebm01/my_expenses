@@ -19,6 +19,9 @@ export interface TransactionFormState {
 
 const MAX_AMOUNT = 9_999_999_999.99; // Decimal(12, 2)
 
+/** Los movimientos de un préstamo los mantiene el préstamo; editarlos aquí los desincronizaría. */
+const LOAN_TRANSACTION_ERROR = "Este movimiento es de un préstamo; cámbialo desde Préstamos.";
+
 async function findTransaction(formData: FormData) {
   const id = formData.get("id");
   return typeof id === "string" && id ? getTransaction(id) : null;
@@ -36,6 +39,7 @@ export async function saveTransactionAction(
   await requireUser();
   const existing = await findTransaction(formData);
   if (formData.get("id") && !existing) return { error: "Este movimiento ya no existe." };
+  if (existing?.loanId) return { error: LOAN_TRANSACTION_ERROR };
 
   const type = formData.get("type");
   const categoryId = formData.get("categoryId");
@@ -82,6 +86,7 @@ export async function deleteTransactionAction(
   await requireUser();
   const transaction = await findTransaction(formData);
   if (!transaction) return { error: "Este movimiento ya no existe." };
+  if (transaction.loanId) return { error: LOAN_TRANSACTION_ERROR };
 
   await deleteTransaction(transaction.id);
   redirect(transactionOriginHref(origin(formData), toDayKey(transaction.date)));

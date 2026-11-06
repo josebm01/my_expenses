@@ -111,6 +111,11 @@ export function formatShortDate(day: DayKey): string {
   return `${d} ${MONTH_NAMES[m - 1].slice(0, 3).toLowerCase()}`;
 }
 
+/** "31 oct 2026" */
+export function formatShortDateWithYear(day: DayKey): string {
+  return `${formatShortDate(day)} ${splitKey(day).y}`;
+}
+
 /** "Miércoles 4 de noviembre" */
 export function formatLongDate(day: DayKey): string {
   const { y, m, d } = splitKey(day);

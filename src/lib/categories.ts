@@ -30,6 +30,14 @@ export interface CategoryInput {
   palette: CategoryPaletteKey;
 }
 
+/** Categorías "Préstamos" (migración `loans`): solo las usan los movimientos que generan los préstamos. */
+export const LOAN_CATEGORY_ID = "loans";
+export const LOAN_REPAYMENT_CATEGORY_ID = "loan-repayments";
+const SYSTEM_CATEGORY_IDS = [LOAN_CATEGORY_ID, LOAN_REPAYMENT_CATEGORY_ID];
+
+/** Activas y elegibles a mano: ni archivadas ni de sistema. */
+const selectable = { archivedAt: null, id: { notIn: SYSTEM_CATEGORY_IDS } } satisfies Prisma.CategoryWhereInput;
+
 const byPosition: Prisma.CategoryOrderByWithRelationInput[] = [{ position: "asc" }, { createdAt: "asc" }];
 
 /** Claves desconocidas (p. ej. editadas a mano en Prisma Studio) caen en el ícono y color de "Otro". */
@@ -50,13 +58,13 @@ export function toCategory(record: CategoryRecord): Category {
 
 /** Categorías activas (no archivadas), en el orden de la cuadrícula de "Nuevo movimiento". */
 export async function getCategories(type?: TransactionType): Promise<Category[]> {
-  const records = await prisma.category.findMany({ where: { type, archivedAt: null }, orderBy: byPosition });
+  const records = await prisma.category.findMany({ where: { type, ...selectable }, orderBy: byPosition });
   return records.map(toCategory);
 }
 
-/** Solo categorías activas: las archivadas no se pueden editar ni elegir. */
+/** Solo categorías activas: las archivadas y las de sistema no se pueden editar ni elegir. */
 export async function getActiveCategory(id: string): Promise<Category | null> {
-  const record = await prisma.category.findFirst({ where: { id, archivedAt: null } });
+  const record = await prisma.category.findFirst({ where: { ...selectable, id } });
   return record && toCategory(record);
 }
 
@@ -69,12 +77,15 @@ export async function isCategoryNameTaken(type: TransactionType, name: string, e
 }
 
 export async function countActiveCategories(type: TransactionType): Promise<number> {
-  return prisma.category.count({ where: { type, archivedAt: null } });
+  return prisma.category.count({ where: { type, ...selectable } });
 }
 
 /** Las nuevas van al final de la cuadrícula. */
 export async function createCategory(type: TransactionType, input: CategoryInput): Promise<Category> {
-  const { _max } = await prisma.category.aggregate({ where: { type }, _max: { position: true } });
+  const { _max } = await prisma.category.aggregate({
+    where: { type, id: { notIn: SYSTEM_CATEGORY_IDS } },
+    _max: { position: true },
+  });
   const record = await prisma.category.create({
     data: { type, ...input, position: (_max.position ?? -1) + 1 },
   });

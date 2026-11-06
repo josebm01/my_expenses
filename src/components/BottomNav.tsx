@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { Suspense } from "react";
 import { Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { HOME, SETTINGS, SUMMARY, TRANSACTIONS, isActivePath, type NavItem } from "@/lib/navigation";
+import { HOME, LOANS, SUMMARY, TRANSACTIONS, isActivePath, type NavItem } from "@/lib/navigation";
 
 const itemClass = "flex min-h-11 min-w-15 flex-col items-center gap-1 pt-1.5 text-[11px]";
 
@@ -48,6 +48,7 @@ function CurrentBottomNav() {
     pathname.startsWith("/new") ||
     pathname.startsWith("/transactions/") ||
     pathname.startsWith("/categories/") ||
+    pathname.startsWith("/loans/") ||
     pathname === "/login"
   ) {
     return null;
@@ -68,7 +69,8 @@ function CurrentBottomNav() {
         <Plus className="size-[26px]" strokeWidth={2.4} aria-hidden />
       </Link>
       <NavLink item={SUMMARY} pathname={pathname} />
-      <NavLink item={SETTINGS} pathname={pathname} />
+      {/* "Ajustes" aún no existe: en móvil su lugar lo ocupa Préstamos (el sidebar muestra ambos). */}
+      <NavLink item={LOANS} pathname={pathname} />
     </nav>
   );
 }

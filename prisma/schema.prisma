@@ -43,8 +43,44 @@ model Transaction {
   note       String?
   date       DateTime        @db.Timestamptz(3)
   createdAt  DateTime        @default(now()) @map("created_at") @db.Timestamptz(3)
+  /// Gasto generado por un préstamo que cuenta en los totales. Se edita desde el préstamo y se borra con él.
+  loanId        String?      @unique @map("loan_id") @db.Uuid
+  loan          Loan?        @relation(fields: [loanId], references: [id], onDelete: Cascade)
+  /// Ingreso generado por un abono de un préstamo que cuenta en los totales. Se borra con el abono.
+  loanPaymentId String?      @unique @map("loan_payment_id") @db.Uuid
+  loanPayment   LoanPayment? @relation(fields: [loanPaymentId], references: [id], onDelete: Cascade)
 
   @@index([date])
   @@index([categoryId])
   @@map("transactions")
+}
+
+/// Dinero que presté y me van abonando. El saldo pendiente se calcula con los abonos, no se almacena.
+model Loan {
+  id            String        @id @default(uuid()) @db.Uuid
+  /// A quién se le prestó.
+  borrower      String
+  amount        Decimal       @db.Decimal(12, 2)
+  date          DateTime      @db.Timestamptz(3)
+  /// Si es true, el préstamo tiene un movimiento de gasto y cada abono uno de ingreso, con las categorías
+  /// de sistema "Préstamos" (`loans` y `loan-repayments`).
+  countInTotals Boolean       @default(true) @map("count_in_totals")
+  createdAt     DateTime      @default(now()) @map("created_at") @db.Timestamptz(3)
+  payments      LoanPayment[]
+  transaction   Transaction?
+
+  @@map("loans")
+}
+
+model LoanPayment {
+  id          String       @id @default(uuid()) @db.Uuid
+  loanId      String       @map("loan_id") @db.Uuid
+  loan        Loan         @relation(fields: [loanId], references: [id], onDelete: Cascade)
+  amount      Decimal      @db.Decimal(12, 2)
+  date        DateTime     @db.Timestamptz(3)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(3)
+  transaction Transaction?
+
+  @@index([loanId, date])
+  @@map("loan_payments")
 }

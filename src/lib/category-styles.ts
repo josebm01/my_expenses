@@ -108,6 +108,12 @@ export const CATEGORY_PALETTES = {
     tint: lightDark("#DDF2EF", "rgba(42, 157, 143, 0.22)"),
     chartColor: "#2A9D8F",
   },
+  brown: {
+    label: "Café",
+    color: lightDark("#8A5A3C", "#D9A88A"),
+    tint: lightDark("#F3E7DF", "rgba(160, 112, 78, 0.24)"),
+    chartColor: "#A0704E",
+  },
   slate: {
     label: "Pizarra",
     color: lightDark("#5B6472", "#B3BAC5"),

@@ -7,19 +7,12 @@ import { deleteTransactionAction, saveTransactionAction, type TransactionFormSta
 import { CategoryIcon } from "@/components/CategoryIcon";
 import type { Category, TransactionType } from "@/lib/categories";
 import { formatShortDate, shiftDay, toDayKey, type DayKey } from "@/lib/dates";
-import { formatSignedCurrency } from "@/lib/format";
+import { formatSignedCurrency, sanitizeAmount } from "@/lib/format";
 import type { TransactionOrigin } from "@/lib/navigation";
 import type { Transaction } from "@/lib/transactions";
 import { cn } from "@/lib/utils";
 
 type DateOption = "today" | "yesterday" | "other";
-
-/** Deja solo dígitos y un punto, con máximo 10 enteros y 2 decimales (cabe en Decimal(12, 2)). */
-function sanitizeAmount(value: string): string {
-  const [rawWhole, ...rest] = value.replace(/[^\d.]/g, "").split(".");
-  const whole = rawWhole.slice(0, 10);
-  return rest.length ? `${whole}.${rest.join("").slice(0, 2)}` : whole;
-}
 
 /** Achica la letra conforme crece el monto para que quepa en un iPhone sin cortarse. */
 function amountFontSize(length: number): number {
