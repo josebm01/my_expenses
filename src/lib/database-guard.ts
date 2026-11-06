@@ -3,9 +3,17 @@
 
 const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "::1", "[::1]"]);
 
+/**
+ * Producción o un deploy de Vercel. Vercel pone `VERCEL=1` en todo el deploy; hace falta porque durante
+ * `npm install` (el `postinstall` corre `prisma generate`, que carga prisma.config.ts) NODE_ENV aún no es "production".
+ */
+function isDeployed(): boolean {
+  return process.env.NODE_ENV === "production" || process.env.VERCEL === "1";
+}
+
 /** Lanza si `url` apunta a una base remota en desarrollo, salvo que se pida explícitamente con `ALLOW_REMOTE_DB=true`. */
 export function assertSafeDatabaseUrl(url: string | undefined, name: string): void {
-  if (!url || process.env.NODE_ENV === "production" || process.env.ALLOW_REMOTE_DB === "true") return;
+  if (!url || isDeployed() || process.env.ALLOW_REMOTE_DB === "true") return;
 
   let host: string;
   try {
