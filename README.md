@@ -27,12 +27,12 @@ Abre [http://localhost:3000](http://localhost:3000).
 | Comando | Qué hace |
 |---|---|
 | `npm run dev` | Servidor de desarrollo |
-| `npm run build` / `npm start` | Build y servidor de producción |
+| `npm run build` / `npm start` | Build y servidor de producción. En los deploys de producción de Vercel (`VERCEL_ENV=production`), `build` primero aplica las migraciones pendientes; en previews y en local solo hace el build |
 | `npm run lint` | ESLint (correr antes de dar algo por terminado) |
 | `npm run db:up` / `npm run db:down` | Levanta / detiene Postgres en Docker. Los datos persisten en el volumen `db-data` |
 | `npm run db:seed` | Carga los datos de ejemplo de `prisma/seed.ts`, solo si la tabla está vacía |
 | `npx prisma migrate dev` | Aplica cambios del schema (en la BD de desarrollo). En Prisma 7 hay que correr después `npx prisma generate` |
-| `npm run db:migrate:prod` | Aplica las migraciones pendientes en producción (Neon), con `NODE_ENV=production` |
+| `npm run db:migrate:prod` | Aplica a mano las migraciones pendientes en producción (Neon), con `NODE_ENV=production`. Normalmente no hace falta: el deploy lo hace solo |
 | `npx prisma studio` | Explorar los datos en el navegador |
 
 ## Base de datos
