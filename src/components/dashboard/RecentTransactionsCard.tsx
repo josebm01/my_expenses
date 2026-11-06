@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { Card } from "@/components/Card";
-import { TransactionRow } from "@/components/TransactionRow";
+import { Card } from "@/components/shared/Card";
+import { TransactionRow } from "@/components/transactions/TransactionRow";
 import { formatRelativeDay, formatShortDate, toDayKey, type DayKey } from "@/lib/dates";
 import { formatSignedCurrency } from "@/lib/format";
 import { signedAmount, transactionTitle, type Transaction } from "@/lib/transactions";

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useActionState, useState } from "react";
 import { Check, X } from "lucide-react";
 import { deleteCategoryAction, saveCategoryAction, type CategoryFormState } from "@/app/categories/actions";
-import { CategoryIcon } from "@/components/CategoryIcon";
+import { CategoryIcon } from "@/components/categories/CategoryIcon";
 import type { Category, TransactionType } from "@/lib/categories";
 import {
   CATEGORY_ICONS,

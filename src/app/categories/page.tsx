@@ -3,10 +3,10 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { ChevronRight, Plus } from "lucide-react";
-import { CategoryIcon } from "@/components/CategoryIcon";
-import { FilterChips } from "@/components/FilterChips";
-import { PageContainer } from "@/components/PageContainer";
-import { PageSkeleton } from "@/components/PageSkeleton";
+import { CategoryIcon } from "@/components/categories/CategoryIcon";
+import { FilterChips } from "@/components/shared/FilterChips";
+import { PageContainer } from "@/components/layout/PageContainer";
+import { PageSkeleton } from "@/components/layout/PageSkeleton";
 import { getCategories, type TransactionType } from "@/lib/categories";
 import { buildHref, firstParam } from "@/lib/url";
 

@@ -1,5 +1,5 @@
-import { Card } from "@/components/Card";
-import { CategoryIcon } from "@/components/CategoryIcon";
+import { Card } from "@/components/shared/Card";
+import { CategoryIcon } from "@/components/categories/CategoryIcon";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import type { CategorySpend } from "@/lib/transactions";
 import { cn } from "@/lib/utils";

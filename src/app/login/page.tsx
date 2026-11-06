@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { FormPageContainer } from "@/components/FormPageContainer";
-import { GoogleSignInButton } from "@/components/GoogleSignInButton";
+import { FormPageContainer } from "@/components/layout/FormPageContainer";
+import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
 
 export const metadata: Metadata = { title: "Iniciar sesión · Mis Gastos" };
 

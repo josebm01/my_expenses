@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
 import { Suspense } from "react";
-import { FormPageContainer } from "@/components/FormPageContainer";
-import { LoanForm } from "@/components/LoanForm";
-import { PageSkeleton } from "@/components/PageSkeleton";
+import { FormPageContainer } from "@/components/layout/FormPageContainer";
+import { LoanForm } from "@/components/loans/LoanForm";
+import { PageSkeleton } from "@/components/layout/PageSkeleton";
 import { todayKey } from "@/lib/dates";
 import { getLoan } from "@/lib/loans";
 

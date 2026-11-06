@@ -79,8 +79,16 @@ La app pide entrar con Google ([Better Auth](https://better-auth.com), sin tabla
 ```
 design/            Diseños de referencia (*.dc.html), fuente de verdad visual
 prisma/            Schema, migraciones y seed
-src/app/           Rutas: / (Inicio), /new, /transactions, /summary
-src/components/    Componentes de UI, uno por archivo
+src/app/           Rutas: / (Inicio), /new, /transactions, /summary, /categories, /loans, /login
+src/components/    Componentes de UI, uno por archivo, agrupados por dominio:
+  ui/              Base de shadcn/ui
+  layout/          Navegación y contenedores de página (BottomNav, Sidebar, PageContainer…)
+  shared/          Piezas genéricas reutilizables (Card, FilterChips, MonthSelect…)
+  auth/            Inicio/cierre de sesión y avatar
+  dashboard/       Tarjetas y gráficas de Inicio y Resumen
+  transactions/    Formulario, filas y filtros de movimientos
+  categories/      Formulario e ícono de categorías
+  loans/           Préstamos, montos y abonos
 src/lib/           Lógica de datos y utilidades (las páginas no llaman a Prisma directamente)
 ```
 

@@ -53,7 +53,8 @@ Esos movimientos (con `loanItemId` / `loanPaymentId`) solo se cambian desde `src
 
 ## Convenciones
 - UI y textos en español; código (variables, funciones, archivos) en inglés.
-- Componentes en `src/components/`, uno por archivo, PascalCase.
+- Componentes en `src/components/<dominio>/`, uno por archivo, PascalCase. Carpetas: `ui/` (shadcn), `layout/` (navegación y contenedores de página), `shared/` (genéricos usados en varias pantallas), `auth/`, `dashboard/` (tarjetas y gráficas de Inicio/Resumen), `transactions/`, `categories/`, `loans/`. Un componente nuevo va en la carpeta de su dominio; si lo usan varios dominios, en `shared/`.
+- Importar cada componente por su ruta (`@/components/loans/LoanForm`); sin archivos `index.ts` de reexportación.
 - Lógica de datos en `src/lib/` (p. ej. `src/lib/transactions.ts`); las páginas no llaman a Prisma directamente.
 - Server Components por defecto; `"use client"` solo cuando haga falta estado o eventos.
 

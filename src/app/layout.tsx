@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Manrope } from "next/font/google";
-import { BottomNav } from "@/components/BottomNav";
-import { Sidebar } from "@/components/Sidebar";
+import { BottomNav } from "@/components/layout/BottomNav";
+import { Sidebar } from "@/components/layout/Sidebar";
 import { THEME_COLORS, THEME_SCRIPT } from "@/lib/theme";
 import "./globals.css";
 

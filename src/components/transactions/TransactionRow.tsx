@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CategoryIcon } from "@/components/CategoryIcon";
+import { CategoryIcon } from "@/components/categories/CategoryIcon";
 import { formatSignedCurrency } from "@/lib/format";
 import { signedAmount, transactionTitle, type Transaction } from "@/lib/transactions";
 import { cn } from "@/lib/utils";
