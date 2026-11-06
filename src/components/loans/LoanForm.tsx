@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useActionState, useRef, useState } from "react";
 import { Plus, Trash2, X } from "lucide-react";
 import { saveLoanAction, type LoanFormState } from "@/app/loans/actions";
-import { CategoryIcon } from "@/components/CategoryIcon";
+import { CategoryIcon } from "@/components/categories/CategoryIcon";
 import type { DayKey } from "@/lib/dates";
 import { formatCurrency, sanitizeAmount } from "@/lib/format";
 import {

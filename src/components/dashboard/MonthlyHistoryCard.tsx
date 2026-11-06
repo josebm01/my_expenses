@@ -1,5 +1,5 @@
-import { Card } from "@/components/Card";
-import { MonthlyHistoryChart } from "@/components/MonthlyHistoryChart";
+import { Card } from "@/components/shared/Card";
+import { MonthlyHistoryChart } from "@/components/dashboard/MonthlyHistoryChart";
 import { formatMonthName, formatMonthShort, type MonthKey } from "@/lib/dates";
 import { formatSignedCurrency } from "@/lib/format";
 import type { MonthHistoryPoint } from "@/lib/transactions";

@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowDownLeft, ArrowUpRight } from "lucide-react";
-import { useTransactionTypeFilter } from "@/components/TransactionTypeFilter";
+import { useTransactionTypeFilter } from "@/components/transactions/TransactionTypeFilter";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import type { MonthTotals } from "@/lib/transactions";
 import { cn } from "@/lib/utils";

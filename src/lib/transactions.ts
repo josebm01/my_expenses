@@ -1,3 +1,4 @@
+import "server-only";
 import type { Prisma } from "@/generated/prisma/client";
 import { toCategory, type Category, type TransactionType } from "./categories";
 import { daysInMonth, monthRange, shiftMonth, toDayKey, type DayKey, type MonthKey } from "./dates";

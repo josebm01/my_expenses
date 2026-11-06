@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useActionState, useState } from "react";
 import { Plus, X } from "lucide-react";
 import { deleteTransactionAction, saveTransactionAction, type TransactionFormState } from "@/app/transactions/actions";
-import { CategoryIcon } from "@/components/CategoryIcon";
+import { CategoryIcon } from "@/components/categories/CategoryIcon";
 import type { Category, TransactionType } from "@/lib/categories";
 import { formatShortDate, shiftDay, toDayKey, type DayKey } from "@/lib/dates";
 import { formatSignedCurrency, sanitizeAmount } from "@/lib/format";

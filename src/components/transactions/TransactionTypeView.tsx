@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useTransactionTypeFilter, type TransactionTypeFilterValue } from "@/components/TransactionTypeFilter";
+import { useTransactionTypeFilter, type TransactionTypeFilterValue } from "@/components/transactions/TransactionTypeFilter";
 
 /** Muestra `children` solo cuando el filtro del dashboard es `value`. */
 export function TransactionTypeView({ value, children }: { value: TransactionTypeFilterValue; children: ReactNode }) {

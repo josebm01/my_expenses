@@ -1,7 +1,7 @@
 import { CalendarDays } from "lucide-react";
-import { SignOutButton } from "@/components/SignOutButton";
-import { ThemeToggle } from "@/components/ThemeToggle";
-import { UserAvatar } from "@/components/UserAvatar";
+import { SignOutButton } from "@/components/auth/SignOutButton";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
+import { UserAvatar } from "@/components/auth/UserAvatar";
 import { formatDayHeading, formatLongDate, type DayKey } from "@/lib/dates";
 
 interface HomeGreetingProps {

@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Suspense } from "react";
-import { SignOutButton } from "@/components/SignOutButton";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { SignOutButton } from "@/components/auth/SignOutButton";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
 import { cn } from "@/lib/utils";
 import { CATEGORIES_NAV, HOME, LOANS, SETTINGS, SUMMARY, TRANSACTIONS, isActivePath } from "@/lib/navigation";
 

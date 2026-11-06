@@ -1,11 +1,11 @@
 import { connection } from "next/server";
 import { Suspense } from "react";
-import { FilterChips } from "@/components/FilterChips";
-import { MonthSelect } from "@/components/MonthSelect";
-import { PageContainer } from "@/components/PageContainer";
-import { PageSkeleton } from "@/components/PageSkeleton";
-import { SearchInput } from "@/components/SearchInput";
-import { TransactionRow } from "@/components/TransactionRow";
+import { FilterChips } from "@/components/shared/FilterChips";
+import { MonthSelect } from "@/components/shared/MonthSelect";
+import { PageContainer } from "@/components/layout/PageContainer";
+import { PageSkeleton } from "@/components/layout/PageSkeleton";
+import { SearchInput } from "@/components/shared/SearchInput";
+import { TransactionRow } from "@/components/transactions/TransactionRow";
 import type { TransactionType } from "@/lib/categories";
 import { formatDayHeading, formatMonthName, formatMonthTitle, parseMonthKey, recentMonths, todayKey } from "@/lib/dates";
 import { formatSignedCurrency } from "@/lib/format";

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { connection } from "next/server";
 import { Suspense } from "react";
-import { FormPageContainer } from "@/components/FormPageContainer";
-import { PageSkeleton } from "@/components/PageSkeleton";
-import { TransactionForm } from "@/components/TransactionForm";
+import { FormPageContainer } from "@/components/layout/FormPageContainer";
+import { PageSkeleton } from "@/components/layout/PageSkeleton";
+import { TransactionForm } from "@/components/transactions/TransactionForm";
 import { getCategories } from "@/lib/categories";
 import { todayKey } from "@/lib/dates";
 

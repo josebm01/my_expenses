@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
 import { Suspense } from "react";
-import { CategoryForm } from "@/components/CategoryForm";
-import { FormPageContainer } from "@/components/FormPageContainer";
-import { PageSkeleton } from "@/components/PageSkeleton";
+import { CategoryForm } from "@/components/categories/CategoryForm";
+import { FormPageContainer } from "@/components/layout/FormPageContainer";
+import { PageSkeleton } from "@/components/layout/PageSkeleton";
 import { getActiveCategory } from "@/lib/categories";
 
 export const metadata: Metadata = { title: "Editar categoría · Mis Gastos" };
