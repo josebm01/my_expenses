@@ -6,9 +6,9 @@ import { Suspense } from "react";
 import { SignOutButton } from "@/components/SignOutButton";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { cn } from "@/lib/utils";
-import { CATEGORIES_NAV, HOME, SETTINGS, SUMMARY, TRANSACTIONS, isActivePath } from "@/lib/navigation";
+import { CATEGORIES_NAV, HOME, LOANS, SETTINGS, SUMMARY, TRANSACTIONS, isActivePath } from "@/lib/navigation";
 
-const ITEMS = [HOME, TRANSACTIONS, SUMMARY, CATEGORIES_NAV, SETTINGS];
+const ITEMS = [HOME, TRANSACTIONS, SUMMARY, LOANS, CATEGORIES_NAV, SETTINGS];
 
 // `usePathname` va dentro de Suspense: en rutas con parámetros dinámicos (/categories/[id]) la ruta
 // solo se conoce al pedir la página, y sin el límite bloquearía el prerender del layout.

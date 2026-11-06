@@ -12,10 +12,16 @@ export interface Transaction {
   concept: string | null;
   note: string | null;
   date: Date;
+  /** Préstamo que generó el movimiento (uno de sus montos o abonos); se edita desde ahí. */
+  loanId: string | null;
 }
 
 const newestFirst: Prisma.TransactionOrderByWithRelationInput[] = [{ date: "desc" }, { createdAt: "desc" }];
-const withCategory = { category: true } satisfies Prisma.TransactionInclude;
+const withCategory = {
+  category: true,
+  loanItem: { select: { loanId: true } },
+  loanPayment: { select: { loanId: true } },
+} satisfies Prisma.TransactionInclude;
 
 type TransactionRecord = Prisma.TransactionGetPayload<{ include: typeof withCategory }>;
 
@@ -36,6 +42,7 @@ function toTransaction(record: TransactionRecord): Transaction {
     concept: record.concept,
     note: record.note,
     date: record.date,
+    loanId: record.loanItem?.loanId ?? record.loanPayment?.loanId ?? null,
   };
 }
 
@@ -77,11 +84,9 @@ export async function getMonthTotals(month: MonthKey): Promise<MonthTotals> {
 
 export interface CategorySpend {
   category: Category;
-  amount: number;
-  /** Porcentaje del gasto total del mes. */
-  share: number;
-  /** Variación vs el mes anterior en %; `null` si el mes anterior fue 0. */
-  change: number | null;
+  amount:   number;
+  share:    number; /** Porcentaje del gasto total del mes. */
+  change:   number | null; /** Variación vs el mes anterior en %; `null` si el mes anterior fue 0. */
 }
 
 export async function getCategoryBreakdown(month: MonthKey): Promise<CategorySpend[]> {
@@ -95,7 +100,15 @@ export async function getCategoryBreakdown(month: MonthKey): Promise<CategorySpe
   };
   const [current, previous] = await Promise.all([totalsFor(month), totalsFor(shiftMonth(month, -1))]);
   // Incluye archivadas: el historial conserva la categoría con la que se registró el gasto.
-  const categories = await prisma.category.findMany({ where: { id: { in: [...current.keys()] } } });
+  const categories = await prisma.category.findMany(
+    { 
+      where: { 
+        id: { 
+          in: [...current.keys()] 
+        } 
+    } 
+  });
+  
   const total = [...current.values()].reduce((a, b) => a + b, 0);
 
   return categories
@@ -193,21 +206,26 @@ export async function getTransactionsByDay({ month, type, query }: TransactionFi
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
+/** Las columnas `@db.Uuid` rechazan otros valores: hay que validar antes de consultar. */
+export function isUuid(value: string): boolean {
+  return UUID_PATTERN.test(value);
+}
+
 /** `null` si no existe o el id no es un UUID (la columna es `@db.Uuid` y Postgres rechazaría la consulta). */
 export async function getTransaction(id: string): Promise<Transaction | null> {
-  if (!UUID_PATTERN.test(id)) return null;
+  if (!isUuid(id)) return null;
   const record = await prisma.transaction.findUnique({ where: { id }, include: withCategory });
   return record && toTransaction(record);
 }
 
 export interface TransactionInput {
-  type: TransactionType;
-  amount: number;
+  type:       TransactionType;
+  amount:     number;
   categoryId: string;
   /** Sin `concept` se deja el que ya tenía (las altas nuevas no lo usan). */
-  concept?: string | null;
-  note: string | null;
-  date: Date;
+  concept?:   string | null;
+  note:       string | null;
+  date:       Date;
 }
 
 export async function createTransaction(input: TransactionInput): Promise<Transaction> {

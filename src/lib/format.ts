@@ -17,6 +17,13 @@ export function formatSignedCurrency(amount: number, { whole = false } = {}): st
   return `${amount < 0 ? "−" : "+"}${formatCurrency(Math.abs(amount), { whole })}`;
 }
 
+/** Para inputs de monto: deja solo dígitos y un punto, con máximo 10 enteros y 2 decimales (cabe en Decimal(12, 2)). */
+export function sanitizeAmount(value: string): string {
+  const [rawWhole, ...rest] = value.replace(/[^\d.]/g, "").split(".");
+  const whole = rawWhole.slice(0, 10);
+  return rest.length ? `${whole}.${rest.join("").slice(0, 2)}` : whole;
+}
+
 /** 26.4 → "26.4%" */
 export function formatPercent(value: number): string {
   return `${percent.format(value)}%`;

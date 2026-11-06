@@ -13,6 +13,7 @@ App web (PWA) para registrar ingresos y gastos, clasificarlos por categoría y v
 - `npm run db:up` / `npm run db:down` — levantar / detener Postgres en Docker (`docker-compose.yml`, puerto 5433 del host). Copiar `.env.example` a `.env` la primera vez.
 - `npm run dev` — servidor local
 - `npx prisma migrate dev` — aplicar cambios al schema; luego `npx prisma generate` (Prisma 7 no lo hace solo). El cliente se genera en `src/generated/prisma` (ignorado en git).
+- `.env` apunta a Neon (producción); `.env.development.local` al Docker y gana en dev (app, Prisma CLI y seed cargan los .env con `@next/env`). Fuera de `NODE_ENV=production` hay un guard que rechaza bases no locales (`ALLOW_REMOTE_DB=true` lo salta). Producción solo se migra con `npm run db:migrate:prod`, y solo cuando el usuario lo pida.
 - `npm run db:seed` — carga los datos de ejemplo de `prisma/seed.ts` solo si la tabla está vacía
 - `npx prisma studio` — ver datos
 - `npm run lint` — correr antes de dar algo por terminado
@@ -38,6 +39,11 @@ Son editables por el usuario (tabla `categories`, pantalla `/categories`). La BD
 Hogar `#5B6472` Home · Alimentos `#C25E14` ShoppingCart · Transporte `#9A7410` Car · Servicios `#B03A6E` Zap · Entretenimiento `#7444C0` Ticket · Compras `#2F5FC4` ShoppingBag · Salud `#1E7F73` Heart.
 Ingresos: Sueldo, Freelance, Ventas, Reembolso (color `#0B6A86`).
 Eliminar una categoría con movimientos la archiva (`archivedAt`): deja de ofrecerse, pero el historial la conserva.
+
+### Préstamos (`/loans`)
+Dinero que el usuario presta a una persona (`loans`) en uno o varios montos con concepto (`loan_items`: "Moto", "Préstamo de dinero") y que le van abonando al total (`loan_payments`); el total y el saldo pendiente se calculan, no se guardan.
+Con `countInTotals`, cada monto genera un gasto y cada abono un ingreso en las categorías de sistema `loans` / `loan-repayments` ("Préstamos"), que no se ofrecen en "Nuevo movimiento" ni en `/categories`.
+Esos movimientos (con `loanItemId` / `loanPaymentId`) solo se cambian desde `src/lib/loans.ts`; la edición de movimientos redirige al préstamo.
 
 ## Reglas de datos
 - Montos siempre `Decimal` (Prisma `@db.Decimal(12, 2)`), nunca `Float`.

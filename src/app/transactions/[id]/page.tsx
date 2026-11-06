@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { FormPageContainer } from "@/components/FormPageContainer";
@@ -32,6 +32,8 @@ async function EditTransactionContent({
   await connection();
   const [transaction, categories] = await Promise.all([getTransaction(id), getCategories()]);
   if (!transaction) notFound();
+  // El préstamo mantiene sus movimientos: se editan desde ahí.
+  if (transaction.loanId) redirect(`/loans/${transaction.loanId}`);
 
   const origin = firstParam(desde) === "inicio" ? "home" : "transactions";
   // Una categoría archivada no se ofrece en altas, pero el movimiento puede conservarla.
