@@ -1,5 +1,8 @@
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@/generated/prisma/client";
+import { assertSafeDatabaseUrl } from "./database-guard";
+
+assertSafeDatabaseUrl(process.env.DATABASE_URL, "DATABASE_URL");
 
 // Una sola instancia en dev: el hot reload de Next reevalúa los módulos y abriría conexiones nuevas.
 const globalForPrisma = globalThis as typeof globalThis & { prisma?: PrismaClient };

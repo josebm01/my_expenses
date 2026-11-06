@@ -31,7 +31,8 @@ Abre [http://localhost:3000](http://localhost:3000).
 | `npm run lint` | ESLint (correr antes de dar algo por terminado) |
 | `npm run db:up` / `npm run db:down` | Levanta / detiene Postgres en Docker. Los datos persisten en el volumen `db-data` |
 | `npm run db:seed` | Carga los datos de ejemplo de `prisma/seed.ts`, solo si la tabla está vacía |
-| `npx prisma migrate dev` | Aplica cambios del schema. En Prisma 7 hay que correr después `npx prisma generate` |
+| `npx prisma migrate dev` | Aplica cambios del schema (en la BD de desarrollo). En Prisma 7 hay que correr después `npx prisma generate` |
+| `npm run db:migrate:prod` | Aplica las migraciones pendientes en producción (Neon), con `NODE_ENV=production` |
 | `npx prisma studio` | Explorar los datos en el navegador |
 
 ## Base de datos
@@ -47,6 +48,15 @@ Postgres corre en Docker ([docker-compose.yml](docker-compose.yml)) en el **puer
 | Contraseña | `my_expenses` |
 
 Estas credenciales son solo para desarrollo local. La app las toma de `DATABASE_URL` en `.env`.
+
+### Desarrollo vs producción
+
+Si tu `.env` apunta a Neon (producción), pon las URLs del Docker en `.env.development.local` (ignorado en git):
+`npm run dev`, la CLI de Prisma y el seed lo cargan con prioridad sobre `.env`, igual que Next. Solo
+`NODE_ENV=production` (`npm run build`, `npm start`, `npm run db:migrate:prod`) usa las URLs de `.env`.
+
+Además, fuera de producción la app, Prisma y el seed se niegan a conectarse a una base que no sea `localhost`
+([src/lib/database-guard.ts](src/lib/database-guard.ts)). Para hacerlo a propósito: `ALLOW_REMOTE_DB=true`.
 
 - El schema está en [prisma/schema.prisma](prisma/schema.prisma); hay una sola tabla, `transactions`.
 - Los montos se guardan como `Decimal(12, 2)`. Los totales mensuales y por categoría se calculan con queries (`groupBy`) y no se almacenan.

@@ -1,7 +1,12 @@
-import "dotenv/config";
+import { loadEnvConfig } from "@next/env";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient, type Category, type Prisma } from "../src/generated/prisma/client";
+import { assertSafeDatabaseUrl } from "../src/lib/database-guard";
 import type { MonthKey } from "../src/lib/dates";
+
+// Igual que prisma.config.ts: en desarrollo gana .env.development.local (Postgres de Docker).
+loadEnvConfig(process.cwd(), process.env.NODE_ENV !== "production", { info: () => {}, error: console.error });
+assertSafeDatabaseUrl(process.env.DATABASE_URL, "DATABASE_URL");
 
 // Datos de ejemplo que replican design/*.dc.html. Usan las categorías por defecto que inserta la migración.
 
